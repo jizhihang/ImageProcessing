@@ -27,14 +27,9 @@ endfunction
 function translated = translateImage(image, translation)
 
   ftImage = fft2(image);
-  
-  
-%  plot2D_FFT(ftImage)
-
   %plot2D_FFT(ftImage);
-  
-%  ftImage = fftshift(ftImage);    
-  translated = ftImage;
+  %ftImage = fftshift(ftImage);    
+  translated = zeros(size(ftImage));
   
   %expFactors = exp(i * 2 * pi / N ) * ones(size(ftImage));
   %expFactors(1, :) = 1;
@@ -64,13 +59,15 @@ function translated = translateImage(image, translation)
     
     for c = 1: halfCol
     
-      translated(r,c, :) = ftImage(r, c, :) * exp(ROW_EXP_FACTOR * (r - 1 - nRow)) * exp(COL_EXP_FACTOR * (c - 1 - nCol));
+      translated(r,c, :) = ftImage(r, c, :) * exp(ROW_EXP_FACTOR * (r - 1 - nRow)) ...
+                                            * exp(COL_EXP_FACTOR * (c - 1 - nCol));
       
     endfor
     
     for c = halfCol + 1 : nCol
     
-      translated(r,c, :) = ftImage(r, c, :) * exp(ROW_EXP_FACTOR * (r - 1)) * exp(COL_EXP_FACTOR * (c - 1 - nCol));
+      translated(r,c, :) = ftImage(r, c, :) * exp(ROW_EXP_FACTOR * (r - 1)) ... 
+                                            * exp(COL_EXP_FACTOR * (c - 1 - nCol));
     
     endfor
     
@@ -80,13 +77,15 @@ function translated = translateImage(image, translation)
     
     for c = 1: halfCol
     
-      translated(r,c, :) = ftImage(r, c, :) * exp(ROW_EXP_FACTOR * (r - 1 - nRow)) * exp(COL_EXP_FACTOR * (c - 1));
+      translated(r,c, :) = ftImage(r, c, :) * exp(ROW_EXP_FACTOR * (r - 1 - nRow)) ...
+                                            * exp(COL_EXP_FACTOR * (c - 1));
       
     endfor
     
     for c = halfCol + 1 : nCol
     
-      translated(r,c, :) = ftImage(r, c, :) * exp(ROW_EXP_FACTOR * (r - 1 )) * exp(COL_EXP_FACTOR * (c - 1 ));
+      translated(r,c, :) = ftImage(r, c, :) * exp(ROW_EXP_FACTOR * (r - 1 )) ...
+                                            * exp(COL_EXP_FACTOR * (c - 1 ));
     
     endfor
          
@@ -113,16 +112,19 @@ function padded = zeroPadding(image, zoom)
   nCol = size(image, 2);
   
   ftImage = fft2(image);
-  padded = zeros(nRow, nCol, 3)
+  padded = zeros(nRow, nCol, 3);
   
-  for ch = 1 :size(image, 3)
+  for ch = 1:size(image, 3)
     
-    
-    padded(:,:, ch)=[ftImage(1:nRow / 2, 1:nCol / 2, ch), zeros(nRow / 2, nPadding(1)), ftImage(1:nRow / 2, nCol / 2 +1 : nCol, ch)];
+    padded(:,:, ch)=[ftImage(1:nRow / 2, 1:nCol / 2, ch), ...
+                    zeros(nRow / 2, nPadding(1)), ...
+                    ftImage(1:nRow / 2, nCol / 2 +1 : nCol, ch)];
     
     padded(:,:, ch)=[padded(:,:, ch); zeros(nPadding(2), size(padded, 2))];
     
-    padded(:,:, ch)=[padded(:, :, ch); ftImage(nRow / 2 + 1:nCol, 1:nCol/2, ch), zeros(nRow / 2, nPadding(1)), ftImage(nRow /2 +1:nRow, nCol / 2 + 1:nCol, ch)];
+    padded(:,:, ch)=[padded(:, :, ch); ftImage(nRow / 2 + 1:nCol, 1:nCol/2, ch), ...
+                    zeros(nRow / 2, nPadding(1)), ...
+                    ftImage(nRow /2 +1:nRow, nCol / 2 + 1:nCol, ch)];
     
     padded = zoom^2 * real(ifft2(padded)) / 255 ;
     
@@ -139,7 +141,8 @@ function subimg = centerPatch(image, w, h)
   topLeft = imgCenter - boxCenter
   bottomRight = imgCenter + boxCenter
   subimg = zeros(size(image));
-  subimg(topLeft(1):bottomRight(1), topLeft(2):bottomRight(2), :) = image(topLeft(1):bottomRight(1), topLeft(2):bottomRight(2), :);
+  subimg(topLeft(1):bottomRight(1), topLeft(2):bottomRight(2), :) = ...
+    image(topLeft(1):bottomRight(1), topLeft(2):bottomRight(2), :);
 endfunction
 
 
@@ -155,16 +158,9 @@ endfunction
 
 function testZoom(img, zoom)
   a = zeroPadding(img, zoom);
-  figure(3)
-  imshow(a)
-  
-  s= [s, 3]
-  b = zeros(s);
-  b(:,:, 1) = a;
-  b(:,:, 2) = a;
-  b(:,:, 3) = a;
-  imwrite(b, "images/house-zoomed.png");
-
+  figure(3);
+  imshow(a);
+  imwrite(a, "images/house-zoomed.png");
 endfunction
 
 function testPatch(img)
@@ -177,8 +173,8 @@ endfunction
 img = imread("images/house.png");
 translation1 = [50, 50];
 translation2 = [50.5, 50.5];
-testTranslation(img, translation1);
+%testTranslation(img, translation1);
 %testTranslation(img, translation2);
 
 zoom = 2;
-%testZoom(img, zoom);
+testZoom(img, zoom);
