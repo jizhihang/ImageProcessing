@@ -1,4 +1,5 @@
-
+%clear all;
+%close all;
 addpath(pwd)
 
 
@@ -129,28 +130,55 @@ function padded = zeroPadding(image, zoom)
   
 endfunction
 
+% Helper function to get a patch of (w, h) from the center of the image
+% No size checks made, center should be parametrizable.
+function subimg = centerPatch(image, w, h)
+  [width height components] = size(image);
+  imgCenter = [round(width/2), round(height/2)];
+  boxCenter = [round(w/2), round(h/2)];
+  topLeft = imgCenter - boxCenter
+  bottomRight = imgCenter + boxCenter
+  subimg = zeros(size(image));
+  subimg(topLeft(1):bottomRight(1), topLeft(2):bottomRight(2), :) = image(topLeft(1):bottomRight(1), topLeft(2):bottomRight(2), :);
+endfunction
 
-img = imread("images/castle.jpg");
 
+function testTranslation(img, translation)
+  figure(1);
+  imshow(img);
 
-%figure(1);
-%imshow(img);
-%
-%translation = [50.5, 50.5];
-%
-%a = translateImage(img, translation);
-%
-%figure(2);
-%imshow(a);
+  a = translateImage(img, translation);
+
+  figure(2);
+  imshow(a);
+endfunction
+
+function testZoom(img, zoom)
+  a = zeroPadding(img, zoom);
+  figure(3)
+  imshow(a)
+  
+  s= [s, 3]
+  b = zeros(s);
+  b(:,:, 1) = a;
+  b(:,:, 2) = a;
+  b(:,:, 3) = a;
+  imwrite(b, "images/house-zoomed.png");
+
+endfunction
+
+function testPatch(img)
+  imshow(img);title('Original');
+  patch = centerPatch(img, 200, 200);
+  patch = patch/255;
+  figure; imshow(patch);title('Patch');
+endfunction
+
+img = imread("images/house.png");
+translation1 = [50, 50];
+translation2 = [50.5, 50.5];
+testTranslation(img, translation1);
+%testTranslation(img, translation2);
 
 zoom = 2;
-a = zeroPadding(img, zoom);
-figure(3)
-imshow(a)
-
-s= [s, 3]
-b = zeros(s);
-b(:,:, 1) = a;
-b(:,:, 2) = a;
-b(:,:, 3) = a;
-imwrite(b, "images/house-zoomed.png");
+%testZoom(img, zoom);
