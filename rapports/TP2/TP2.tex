@@ -1,0 +1,63 @@
+\documentclass[12pt]{article}
+
+% ----- Preamble
+\usepackage[utf8]{inputenc} % police encodee en latin1=iso8859-1=Windows Latin 1 %
+\usepackage[french]{babel} % police fr %
+\usepackage{hyperref} % pour les references %
+\usepackage{amsmath} % pour les formules de maths %
+\usepackage{amssymb} % pour les symboles maths %
+\usepackage{amsthm} % pour la mise en forme des theoremes %
+\usepackage{aeguill} % pour les guillemets et accents francais %
+\usepackage{listings} % pour les listings de code %
+\usepackage{helvet} % police helvetica %
+\usepackage{graphicx}
+
+% modification des dimensions de la page et de son centrage %
+\topmargin 0.0cm
+\oddsidemargin 0.2cm
+\textwidth 16cm 
+\textheight 21cm
+\footskip 0.0cm
+
+\title{Traitement d'Image et du Signal - TP2}
+\author{Laurent Cetinsoy, Karim Kouki, Aris Tritas }
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+La transformée de Fourier est un opérateur mathématique permettant de donner une représentation fréquentielle d'un signal ou d'une image. 
+Elle permet aussi d'effectuer des transformations efficaces du point de vue de la complexité algorithmique telles que translation, zoom, rotation 
+en manipulant le polynôme trigonométrique généré par la transformée de fourier discrète. Dans ce TP nous proposons l'implémentation de la translation d'image et le zoom d'image en se basant sur la Fast Fourier Transform. Puis nous proposons un algorithme pour effectuer une rotation d'image à partir de la solution proposée par 
+\end{abstract}
+
+\section{Introduction}
+
+La transformée de Fourier Discrète d'un signal échantilloné (qu'il s'agisse de sons ou d'images) possède plusieurs propriétés intéressantes. L'une d'entre elle est et de permettre de fournir une interpolation du signal d'origine de bonne qualité et donc de le rendre "continu". Il est ainsi possible de définir des transformations comme des translations d'une fraction de pixel.
+
+\section{Translation d'image à l'aide de FFT}
+
+On propose un algorithme (cf code source) de translation d'image basé sur la FFT en transformant la représentation fréquentielle de l'image de telle manière que la transformée inverse engendre une image translatée. 
+
+\begin{equation*}
+1 = 1
+\end{equation*}
+
+Remarque : Pour des raisons historiques, l'algorithme standard de FFT donne une représentation en fréquence différente de celle qui est manipulée par l'homme. $f_{min}$ Il est ainsi nécessaire de tenir compte de ce fait lors de la manipulation de la représentation fréquentielle du signal.
+
+\section{Zoom par la méthode du Zero Padding}
+
+La taille d'une image est donnée par le nombre d'échantillons ou de pixels qu'elle possède. Or la taille du polynôme trigonométrique engendré par la TFD est identique à la taille de l'image. Il est ainsi possible d'aggrandir une image en ajoutant des termes de coefficient nul à la représentation fréquentielle. En prenant la transformée inverse du polynome résultant, l'image est conservée mais la taille du polynome étant plus élevée, l'image est plus grande. 
+
+\begin{equation}
+    Tf_{padded} = û(0) + û(1) * X + ... + û(k) * X^k + 0*X^{k+1} + ... + 0*X^{k+p}
+\end{equation}
+
+
+\section{Algorithme de rotation}
+
+Il est proposé une rotation 
+
+\end{document}

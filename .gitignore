@@ -1,3 +1,7 @@
 *.zip
 TP1/
 octave-workspace
+*.aux
+*.log
+*.out
+*~

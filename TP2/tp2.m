@@ -121,7 +121,29 @@ function I_hat_zoom = zeroPadding(image, zoom)
   I_hat = fft2(image);
   
   % Naive
+  % Not Naive: https://fossies.org/dox/octave-4.0.3/fftshift_8m_source.html
   I_hat = fftshift(I_hat);
+  
+  for r = 1:halfRow
+    for c = 1:halfCol
+
+    endfor
+
+    for c = halfCol+1:nCol
+
+    endfor
+  endfor
+
+  for r = halfRow+1:nRow
+
+    for c = 1: halfCol     
+    endfor
+
+    for c = halfCol+1:nCol    
+    endfor
+
+  endfor
+
   I_hat_zoom(topLeft(1):bottomRight(1), topLeft(2):bottomRight(2), :) = I_hat;
   
   % Back to image space
@@ -168,7 +190,7 @@ function testZoom(name, img, zoom)
   if(size(a, 3)==1)
    a(:, :, 1)
   endif
-  %gure(3);imshow(a);
+  %figure(3);imshow(a);
   filename = sprintf("images/%s-%dx%d-zoomed-%d.png", ...
                       name, size(img, 1), size(img, 2), zoom);
   imwrite(a, filename);
