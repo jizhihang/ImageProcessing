@@ -103,12 +103,12 @@ function translated = translateImage(image, translation)
 endfunction 
 
 function I_hat_zoom = zeroPadding(image, zoom)
-  [H W nComp] = size(image)
+  [H W nComp] = size(image);
   [H2, W2] = deal(round(zoom * H), round(zoom * W));
   [Hc Wc] = compute_center(H, W);
   
   I_hat_zoom = zeros(H2,W2, nComp);
-  % Fourier transform
+  % Fast Fourier Transform
   I_hat = fft2(image);
   
   I_hat_zoom(1:Hc, 1:Wc, :) = I_hat(1:Hc, 1:Wc, :);
@@ -125,9 +125,9 @@ endfunction
 % Helper function to get a patch of (w, h) from the image
 % with specified patch center.
 function subimg = patch(image, center_coords, side_size)
-  side_half = compute_center(side_size, side_size);
-  topLeft = center_coords - side_half;
-  bottomRight = center_coords + side_half;
+  half_side = compute_center(side_size, side_size);
+  topLeft = center_coords - half_side;
+  bottomRight = center_coords + half_side;
   if(mod(side_size, 2)==0)
     topLeft = topLeft + 1;
   endif
@@ -150,47 +150,49 @@ endfunction
 %%% --------------------- Testing functions
 
 function testTranslation(img, translation)
-  figure(1);imshow(img);
   a = translateImage(img, translation);
-  figure(2);imshow(a);
+  figure;imshow(a); title('Translated')
 endfunction
 
 function testZoom(name, img, zoom)
   a = zeroPadding(img, zoom);
-  if(size(a, 3)==1)
-   a(:, :, 1)
-  endif
-  %figure(3);imshow(a);
+  figure;imshow(a); title('Zoomed')
   filename = sprintf('images/%s-%dx%d-zoomed-%d.png', ...
                       name, size(img, 1), size(img, 2), zoom);
   imwrite(a, filename);
 endfunction
 
 function testPatch(img)
-  figure; imshow(img);title('Original');
   patch = centered_patch(img, 257);
-  figure; imshow(patch);title('Patch');
+  figure; imshow(patch);title('Center Patch');
 endfunction
 
 function testPatch2(img)
-  figure; imshow(img);title('Original');
   patch = patch2(img, [100 100], 256);
   size(patch)
   figure; imshow(patch);title('Patch');
 endfunction
 
 %%% --------------------- Main
-filename = 'ruins.jpg';
+
+% --- Load an image
+filename = 'flowers.bmp';
 img = imread(sprintf('images/%s', filename));
 im_name = cell2mat(strsplit(filename, '.')(1,1));
+figure;imshow(img);title('Original');
+
+% --- Test patch extraction
 %testPatch2(img);
 patch = centered_patch(img, 256);
+
+% --- Test translation
 translation1 = [50, 50];
 translation2 = [50.5, 50.5];
-%testTranslation(img, translation1);
-%testTranslation(img, translation2);
+testTranslation(img, translation1);
+testTranslation(img, translation2);
 
-zooms = [2 1.25];
+% --- Test zoom
+zooms = [2];
 for i=1:size(zooms,2)
-  testZoom(im_name, img, zooms(i));
+  testZoom(im_name, patch, zooms(i));
 endfor
