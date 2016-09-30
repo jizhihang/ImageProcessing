@@ -103,51 +103,21 @@ function translated = translateImage(image, translation)
 endfunction 
 
 function I_hat_zoom = zeroPadding(image, zoom)
-  [W H nComp] = size(image);
-  [W2, H2] = deal(round(zoom * W), round(zoom * H));
-  [Wc Hc] = compute_center(W, H);
-  [W2c H2c] = compute_center(W2, H2);
-  topLeft = [W2c H2c] - [Wc Hc];
-  bottomRight = [W2c H2c] + [Wc Hc];
-  % topLeft = topLeft + [(mod(W, 2)==0) (mod(H, 2)==0)]
-  if(mod(W, 2)==0)
-    topLeft = topLeft + [1 0];
-  endif  
-  if(mod(H, 2)==0)
-    topLeft = topLeft + [0 1];
-  endif
+  [H W nComp] = size(image)
+  [H2, W2] = deal(round(zoom * H), round(zoom * W));
+  [Hc Wc] = compute_center(H, W);
   
-  I_hat_zoom = zeros(W2,H2, nComp);
+  I_hat_zoom = zeros(H2,W2, nComp);
+  % Fourier transform
   I_hat = fft2(image);
   
-  % Naive
-  % Not Naive: https://fossies.org/dox/octave-4.0.3/fftshift_8m_source.html
-  I_hat = fftshift(I_hat);
-  
-  for r = 1:halfRow
-    for c = 1:halfCol
-
-    endfor
-
-    for c = halfCol+1:nCol
-
-    endfor
-  endfor
-
-  for r = halfRow+1:nRow
-
-    for c = 1: halfCol     
-    endfor
-
-    for c = halfCol+1:nCol    
-    endfor
-
-  endfor
-
-  I_hat_zoom(topLeft(1):bottomRight(1), topLeft(2):bottomRight(2), :) = I_hat;
+  I_hat_zoom(1:Hc, 1:Wc, :) = I_hat(1:Hc, 1:Wc, :);
+  I_hat_zoom(1:Hc, W2-Wc+1:W2, :) = I_hat(1:Hc, Wc+1:W, :);
+  I_hat_zoom(H2-Hc+1:H2, 1:Wc, :) = I_hat(Hc+1:H, 1:Wc, :);
+  I_hat_zoom(H2-Hc+1:H2, W2-Wc+1:W2, :) = I_hat(Hc+1:H, Wc+1:W, :);
   
   % Back to image space
-  I_hat_zoom = zoom^2 * real(ifft2(I_hat_zoom)) / 255 ;
+  I_hat_zoom = zoom^2 * real(ifft2(I_hat_zoom)) / 255;
 endfunction
 
 %%% --------------------- Patch extraction (Care: No size checks)
@@ -191,7 +161,7 @@ function testZoom(name, img, zoom)
    a(:, :, 1)
   endif
   %figure(3);imshow(a);
-  filename = sprintf("images/%s-%dx%d-zoomed-%d.png", ...
+  filename = sprintf('images/%s-%dx%d-zoomed-%d.png', ...
                       name, size(img, 1), size(img, 2), zoom);
   imwrite(a, filename);
 endfunction
@@ -210,9 +180,9 @@ function testPatch2(img)
 endfunction
 
 %%% --------------------- Main
-filename = "ruins.jpg";
-img = imread(sprintf("images/%s", filename));
-im_name = cell2mat(strsplit(filename, ".")(1,1));
+filename = 'ruins.jpg';
+img = imread(sprintf('images/%s', filename));
+im_name = cell2mat(strsplit(filename, '.')(1,1));
 %testPatch2(img);
 patch = centered_patch(img, 256);
 translation1 = [50, 50];
@@ -222,5 +192,5 @@ translation2 = [50.5, 50.5];
 
 zooms = [2 1.25];
 for i=1:size(zooms,2)
-  testZoom(im_name, patch, zooms(i));
+  testZoom(im_name, img, zooms(i));
 endfor
