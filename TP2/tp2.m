@@ -149,16 +149,17 @@ endfunction
 
 %%% --------------------- Testing functions
 
-function testTranslation(img, translation)
+function testTranslation(name, img, translation)
   a = translateImage(img, translation);
-  figure;imshow(a); title('Translated')
+  %figure;imshow(a); title('Translated')
+  filepath = sprintf('output/translated-%s', name);
+  imwrite(a, filepath);
 endfunction
 
 function testZoom(name, img, zoom)
   a = zeroPadding(img, zoom);
-  figure;imshow(a); title('Zoomed')
-  filename = sprintf('images/%s-%dx%d-zoomed-%d.png', ...
-                      name, size(img, 1), size(img, 2), zoom);
+  %figure;imshow(a); title('Zoomed')
+  filename = sprintf('output/zoomed-x%d-%s', zoom, name);
   imwrite(a, filename);
 endfunction
 
@@ -174,12 +175,13 @@ function testPatch2(img)
 endfunction
 
 %%% --------------------- Main
+%%% Results are written in the `output` directory
 
 % --- Load an image
 filename = 'flowers.bmp';
 img = imread(sprintf('images/%s', filename));
-im_name = cell2mat(strsplit(filename, '.')(1,1));
-figure;imshow(img);title('Original');
+%im_name = cell2mat(strsplit(filename, '.')(1,1));
+%figure;imshow(img);title('Original');
 
 % --- Test patch extraction
 %testPatch2(img);
@@ -188,11 +190,12 @@ patch = centered_patch(img, 256);
 % --- Test translation
 translation1 = [50, 50];
 translation2 = [50.5, 50.5];
-testTranslation(img, translation1);
-testTranslation(img, translation2);
+testTranslation(filename, img, translation1);
+testTranslation(filename, img, translation2);
 
 % --- Test zoom
 zooms = [2];
 for i=1:size(zooms,2)
-  testZoom(im_name, patch, zooms(i));
+  %testZoom(filename, patch, zooms(i));
+  testZoom(filename, img, zooms(i));
 endfor

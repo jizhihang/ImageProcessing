@@ -37,10 +37,13 @@ La Transformée de Fourier Discrète d'un signal $u$ échantilloné $N$ fois s'e
 \begin{equation*}
 \hat{u}(k) = \sum_{n=0}^{N-1} u(n)\exp(-2 i \pi \frac{k}{N}n) \;\; \forall \, k \in \{0, ... ,N-1\}
 \end{equation*}
-En effet, qu'il s'agisse de sons ou d'images, la TFD possède plusieurs propriétés intéressantes. D'après le théorème de Shannon-Whittaker, si le signal échantilloné est en bande limitée et de support infini, la fonction originale peut être reconstituée entièrement par une sinc-interpolation. \newline Pour un opérateur d'interpolation linéaire $T$ invariant par translation, l'application de $Tu(x)$ reconstitue la fonction originale $u$ sans perte d'énergie. De plus, ces transformations sont définies sur un spectre continu.
+En effet, qu'il s'agisse de sons ou d'images, la TFD possède plusieurs propriétés intéressantes. 
+D'après le théorème de Shannon-Whittaker, si le signal échantilloné est en bande limitée et de support infini, la fonction originale peut être reconstituée entièrement par une sinc-interpolation. 
+Pour un opérateur d'interpolation linéaire $T$ invariant par translation, l'application de $Tu(x)$ reconstitue la fonction originale $u$ sans perte d'énergie. 
+De plus, ces transformations sont définies sur un spectre continu (donc sur des demi-pixels).
 
-Aussi, des transformations telles que la translation, le zoom ou la rotation peuvent être implémentées efficacement du point de vue de la complexité algorithmique en manipulant le polynôme trigonométrique de la Transformée de Fourier. 
-
+Aussi, des transformations telles que la translation, le zoom ou la rotation peuvent être implémentées efficacement du point de vue de la complexité algorithmique en manipulant le polynôme trigonométrique de la transformée de Fourier. 
+\newpage
 \section*{Translation d'image}
 
 On propose un algorithme (cf. code source) de translation d'image basé sur la Fast Fourier Transform (FFT). A partir de la transformée d'une image l'on calcule la transformée inverse avec l'interpolation suivante, en 2D: $\;\;\forall \, n \in \{0, ... ,N-1\}\; \; \forall \, m \in \{0, ... ,M-1\}$ 
@@ -61,8 +64,7 @@ Cette prolongation donne une image aggrandie lors de l'inversion du polynôme tr
 
 
 \section*{Rotation d'image}
-Pour chaque point $(x, y)$ de l'image originale nous souhaitons utiliser la TFD pour calculer le point $(x', y')$ correspond par une rotation de $\theta \in {[0, 2\pi]}$. \newline
-Dans \cite{unser95} \cite{larkin97} L'opération à appliquer est définie comme la matrice \textbf{M} ci-dessous:
+Pour chaque point $(x, y)$ de l'image originale nous souhaitons utiliser la TFD pour calculer le point $(x', y')$ résultant d'une rotation d'angle  $\theta \in {[0, 2\pi]}$. L'on peut définir la rotation par la matrice \textbf{M} ci-dessous:
 $$\begin{pmatrix}
 x' \\ y'
 \end{pmatrix}=
@@ -77,7 +79,7 @@ x \\ y
 x \\ y
 \end{pmatrix}
 $$
-où \textbf{M} peut être exprimée comme suit:
+où \textbf{M} peut être ré-exprimée comme suit (e.g. \cite{paeth86}):
 $$M =
 \begin{pmatrix}
 1 & -\tan \frac{\theta}{2} \\
@@ -92,11 +94,13 @@ $$M =
 0 & 1
 \end{pmatrix}
 $$
-L'idée est d'utiliser trois convolutions linéaires (et donc séparables) qui distordent l'image selon les axes $x$, $y$ et $x$ successivement.
-Ce qui rend l'algorithme efficace est que chacune s'écrit comme une translation dans le domaine de Fourier.
-
+L'idée de \cite{unser95} \cite{larkin97} est d'utiliser trois convolutions linéaires (et donc séparables) qui distordent l'image successivement selon les axes $x$, $y$ et $x$. 
+Chacune s'écrit comme une translation dans le domaine de Fourier. La distortion $u_{dx}(x, y) = u(x + ay, y)$ pour l'axe $x$ (où $a$ contrôle l'angle) s'exprime par l'opérateur suivant:
+$$ D_x(\xi) = \mathcal{F}\{u_d(x, y)\} = \mathcal{F}\{u(x, y)\} e^{-2 i \pi \xi a y}$$
+Le signal réel distordu sur $x$ par la transformée inverse : $ u_{dx}(x, y) = \mathcal{F}^{-1}\{D_x(\xi) \} $ \newline
+Si l'on répête cette opération pour $y$ et encore une fois pour $x$ l'on retrouve le signal réel pivoté. Il s'agit bien de trois translations, donc un algorithme efficace qui les effectue peut être donné. A noter que cette méthode induit une perte d'information près des bords, il devient donc nécessaire d'envisager une convolution plus robuste pour parer à cet effet-là.
 \section*{Résultats}
-Ci-dessous l'image originale de dimension $502\text{px} \times 502 \text{px}$, la même image translatée de $50.5 \text{px}$ dans chaque direction, et un patch de $256\text{px}$ de côté extrait du centre de l'image et zoomé $\times 2$.
+Ci-dessous de gauche à droite se trouvent: l'image originale de dimension $502\text{px} \times 502 \text{px}$, la même image translatée de $50.5 \text{px}$ dans chaque direction, et un patch de $256\text{px}$ de côté extrait du centre de l'image et zoomé $\times 2$.
 
 \begin{figure}[h]
 	\includegraphics[width=0.3\textwidth]{flowers.png}
@@ -114,6 +118,10 @@ Ci-dessous l'image originale de dimension $502\text{px} \times 502 \text{px}$, l
   Larkin, Kieran G., Michael A. Oldfield, and Hanno Klemm. 
   "Fast Fourier method for the accurate rotation of sampled images." 
   Optics communications 139.1 (1997): 99-106.
+\bibitem{paeth86}
+	Paeth, Alan W. 
+	"A fast algorithm for general raster rotation." 
+	Graphics Interface. Vol. 86. 1986.
 
 \end{thebibliography}
 
