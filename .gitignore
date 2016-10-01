@@ -5,3 +5,5 @@ octave-workspace
 *.log
 *.out
 *~
+*.dvi
+*.gz

@@ -48,7 +48,7 @@ function translated = translateImage(image, translation)
   
   nRow = size(ftImage, 1); %N
   nCol = size(ftImage, 2); %M
-  [halfRow halfCol] = compute_center(nRow, nCol)
+  [halfRow halfCol] = compute_center(nRow, nCol);
    
   MINUS_TWO_I_PI =  - 2 * i * pi ;
   ROW_EXP_FACTOR = translation(1) * MINUS_TWO_I_PI / nRow;
