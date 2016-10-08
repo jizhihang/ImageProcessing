@@ -122,23 +122,23 @@ De même que pour la question 1, la réponse impulsionnelle peut être donnée p
 \item $g(x) = \int_{x-\frac{1}{2}}^{x+\frac{1}{2}} f(t) \,\mathrm{d}t$: \newline
 La relation est linéaire par linéarité de l'intégration: $$\int_{x-\frac{1}{2}}^{x+\frac{1}{2}} f_1(t) + f_2(t) \,\mathrm{d}t = \int_{x-\frac{1}{2}}^{x+\frac{1}{2}} f_1(t) \,\mathrm{d}t+ \int_{x-\frac{1}{2}}^{x+\frac{1}{2}} f_2(t) \,\mathrm{d}t$$ \newline
 La relation est invariante par translation: soit l'entrée $f(t-\tau)$, \newline en posant $t' = t -\tau \implies \mathrm{d}t' = \,\mathrm{d}t $ $$\int_{x-\frac{1}{2}-\tau}^{x+\frac{1}{2}-\tau} f(t')\,\mathrm{d}t' \rightarrow g(x-\tau)$$
-Afin de calculer la réponse impulsionnelle, considérons la fonction porte suivante: $\Pi(x, t) = \mathds{1}\{t-x \in {[{-\frac{1}{2}}, \frac{1}{2}]}\}$ \newline
+Afin de calculer la réponse impulsionnelle, considérons la fonction porte suivante: $\Pi(t) = \mathds{1}\{t \in {[{-\frac{1}{2}}, \frac{1}{2}]}\}$ \newline
 \begin{equation*}\begin{split}
-g(x) = \int_{x-\frac{1}{2}}^{x+\frac{1}{2}} f(t) \,\mathrm{d}t = \int_{-\infty}^{\infty} f(t) \Pi(x, t) \,\mathrm{d}t = (f \otimes \Pi(x, t))(x).
+g(x) = \int_{x-\frac{1}{2}}^{x+\frac{1}{2}} f(t) \,\mathrm{d}t = \int_{-\infty}^{\infty} f(t) \Pi(x-t) \,\mathrm{d}t = (f \otimes \Pi(x-t))(x).
 \end{split}\end{equation*}
-Donc la réponse impulsionnelle s'écrit $h(t) = \mathds{1}\{t-x \in {[{-\frac{1}{2}}, \frac{1}{2}]}\}$
+Donc la réponse impulsionnelle s'écrit $h(t) = \mathds{1}\{t\in {[{-\frac{1}{2}}, \frac{1}{2}]}\}$
 \item $g(x) = \max\{f(t), t \in {[x-1, x+1]}\}$: \newline
 La réponse n'est pas linéaire, en effet 
 \begin{equation*}\begin{split}
 \alpha_1 f_1(t) + \alpha_2 f_2(t) & \longrightarrow \max(\alpha_1 f_1(t), \alpha_2 f_2(t)) \\
-								  & \centernot\longrightarrow \alpha_1 \max(f_1(t)) + \alpha_2 \max(f_2(t))
+								  & \centernot\longrightarrow (\alpha_1 + \alpha_2) \max(f_1(t),f_2(t))
 \end{split}\end{equation*}
-%De plus la réponse n'est pas invariante par translation.\newline
-%$$\max\{f(t-\tau), t \in {[x-1, x+1]}\} \centernot\rightarrow \max\{f(t), t \in {[x-1-\tau, x+1-\tau]}\}  $$
+De plus la réponse n'est pas invariante par translation.\newline
+$$f(t-\tau) \centernot\rightarrow \max\{f(t), t \in {[x-1-\tau, x+1-\tau]}\}  $$
 \end{enumerate}
 \subsection*{Exercice 2}
 \begin{enumerate}
-\item $u_0 = 1, u_n = 0 \forall n \neq 0$: \newline
+\item $u_0 = 1, \; u_n = 0 \; \forall n \neq 0$: \newline
 $w_1(n) = (u \otimes v)(n) = (v \otimes u)(n) = v_n = \sqrt{\log(\cos(3n)+2)}$ 
 \item $u_0 = 2, u_1 = - \frac{1}{2} , v_0 = 5, v_1 = 3, v_2 = 4$ \newline
 L'on donne les termes de $w(n)$ non-nuls ci-dessous:
@@ -156,7 +156,10 @@ De même, les termes non-nuls sont:
 \item $w_3(1) = u_{-1} v_2 + u_0 v_1 = 6.5$
 \item $w_3(2) = u_0 v_2 = -2$
 \end{itemize}
-\item En remarquant que les termes des suites $u$ et $v$ sont la somme des termes des suites des deux question précédentes, la distributivité du produit de convolution donne: $w_4(n) = w_2(n) + w_3(n), \; \forall n \in \mathcal{D}(w_2) \cup \mathcal{D}(w_3)$ où $\mathcal{D}$ est le domaine de définition de chaque suite.
+\item $u_{-1} = 2, u_0 = \frac{3}{2}, u_1 = - \frac{1}{2}, v_0 = 5, v_1 = 3, v_2 = 4$ \newline 
+En remarquant que les termes des suites $u$ sont la somme des termes des suites des deux question précédentes, la distributivité du produit de convolution donne: 
+$w_4(n) = w_2(n) + w_3(n), \; \forall n \in \mathcal{D}(w_2) \cup \mathcal{D}(w_3)$ 
+où $\mathcal{D}$ est le domaine de définition de chaque suite.
 \item $u_n = (-\frac{1}{2})^n, \; n \in \mathbb{N}, \text{sinon} \; u_n = 0$ et $v_0 = 1, v_1 = \frac{1}{2}$: \newline
 En ne gardant que les termes non-nuls du produit de convolution et en factorisant par $(-\frac{1}{2})^{n-1}$
 \begin{equation*}\begin{split}
