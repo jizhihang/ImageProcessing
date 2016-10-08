@@ -28,7 +28,7 @@
 \maketitle
 
 \begin{abstract}
-L'objectif de ce TP est de calculer des convolutions, vérifier la validité de filtres linéaires, extraire leur réponse impulsionnelle. Par ailleus nous mettons en pratique la méthode de rotation par distortion de Yarolavsky.
+L'objectif de ce TP est de calculer des convolutions, vérifier la validité de filtres linéaires, extraire leur réponse impulsionnelle. Par ailleus nous mettons en pratique la méthode de rotation par distortion de L.Yarolavsky.
 \end{abstract}
 
 \section*{Introduction}
@@ -69,24 +69,25 @@ L'idée de \cite{unser95} \cite{larkin97} est d'utiliser trois convolutions lin�
 Chacune s'écrit comme une translation dans le domaine de Fourier. La distortion $u_{dx}(x, y) = u(x + ay, y)$ pour l'axe $x$ (où $a$ contrôle l'angle) s'exprime par l'opérateur suivant:
 $$ D_x(\xi) = \mathcal{F}\{u_d(x, y)\} = \mathcal{F}\{u(x, y)\} e^{-2 i \pi \xi a y}$$
 Le signal réel distordu sur $x$ par la transformée inverse : $ u_{dx}(x, y) = \mathcal{F}^{-1}\{D_x(\xi) \} $ \newline
-Si l'on répête cette opération pour $y$ et encore une fois pour $x$ l'on retrouve le signal réel pivoté. Il s'agit bien de trois translations, donc un algorithme efficace qui les effectue peut être donné. A noter que cette méthode induit une perte d'information près des bords, il devient donc nécessaire d'envisager une convolution plus robuste pour parer à cet effet-là.
+Si l'on répête cette opération pour $y$ et encore une fois pour $x$ l'on retrouve le signal réel pivoté. Il s'agit bien de trois translations, donc un algorithme efficace qui les effectue peut être donné. A noter que cette méthode induit une perte d'information près des bords, il convient donc d'insérer l'image originale dans un cadre.
 
 \section*{Exercices}
 
 Notons le signal d'entrée $e(t)$ et le signal de sortie $s(t)$.
 
 
-\textbf{Définition} Système linéaire: \newline
+\textbf{Définition} Système linéaire: pour $\alpha_1, \alpha_2 \in \mathbb{R}$\newline
 Si $e_1(t) \rightarrow s_1(t)$ et $e_2(t) \rightarrow s_2(t)$, alors $\alpha_1 e_1(t) + \alpha_2 e_2(t) \rightarrow \alpha_1 s_1(t) + \alpha_2 s_2(t)$
 
-\textbf{Définition} Système invariant: \newline
+\textbf{Définition} Système invariant: pour $\tau \in \mathbb{R}$ \newline
 Si $e(t) \rightarrow s(t)$ alors $e(t-\tau) \rightarrow s(t-\tau)$, $\tau$ étant une constante de décalalage.
 
-\textbf{Définition} Réponse impulsionnelle: \newline
-La sortie d'un système linéaire invariant est égale au produit de convolution de l'entrée par la réponse impulsionnelle $h$. $$e(t) \longrightarrow s(t) = (e \otimes h)(t)$$
-
-\textbf{Définition} Produit de convolution de deux suites $u_n$ et $v_n$: \newline
+\textbf{Définition} Produit de convolution de deux suites $u_n$ et $h_n$: \newline
 $$ (u \otimes h)(n) = \sum_{k \in \mathbb{Z}} u_{n-k}h_k $$
+
+\textbf{Définition} Réponse impulsionnelle: \newline
+La sortie d'un système linéaire invariant est égale au produit de convolution de l'entrée par la réponse impulsionnelle $h, \;\;e(t) \longrightarrow s(t) = (e \otimes h)(t)$
+
 
 \subsection*{Exercice 1}
 Pour les questions (1)-(4), l'entrée est la suite $u_n$ et la sortie la suite $v_n$ pour $n \in \mathbb{Z}$. \newline
@@ -94,11 +95,10 @@ Pour les questions (5) et (6) l'entrée est une fonction $f \in \mathrm{L}^1 \ca
 \begin{enumerate}
 \item $v_n = u_n - u_{n-1} + 3u_{n+1}$: \newline
 La relation est une somme de termes décalés et comporte des produits avec des scalaires, elle est donc linéaire. $\alpha(u_n - u_{n-1} + 3u_{n+1}) \rightarrow \alpha v_n$ \newline
-invariant car $u_{n-\tau} - u_{n-1-\tau} + 3u_{n+1-\tau} \rightarrow v_{n-\tau}$ \newline
-réponse impulsionnelle: par identification $h_{-1} = 3, h_0 = 1, h_1 = -1$
+La relation est invariante car $u_{n-\tau} - u_{n-1-\tau} + 3u_{n+1-\tau} \rightarrow v_{n-\tau}$ \newline
+La réponse impulsionnelle peut être donnée par identification des termes de la somme du produit de convolution: $h_{-1} = 3, h_0 = 1, h_1 = -1$
 \item $v_n = u_{2n}$: \newline
-La relation impulsionnelle est un sous échantillonnage qui est linéaire: sous-échantillonner la somme de deux signaux revient à sommer les sous échantillons des signaux.
-linéaire car $\alpha u_{2n} \rightarrow \alpha v_n$ \newline
+La relation impulsionnelle est un sous échantillonnage qui est linéaire. En effet $\alpha u_{2n} \rightarrow \alpha v_n$. De plus, sous-échantillonner la somme de deux signaux revient à sommer les sous-échantillons de ces signaux.
 La relation est non-invariante par translation car $u_{2n-\tau} \centernot\longrightarrow v_{n-\tau} (=u_{2(n-\tau)})$
 \item $v_n = \max(u_n, u_{n-1}, u_{n+1})$: \newline
 L'opérateur max n'est pas linéaire. Considérons les suites $u_n$ et $u_n'$ définies par: \newline
@@ -107,12 +107,18 @@ L'opérateur max n'est pas linéaire. Considérons les suites $u_n$ et $u_n'$ d�
 \item $u_0 = -1, u_1 = -1, u_2 = -10 $
 \item $u_0' = -1, u_1' = 1, u_2' = 10 $
 \end{itemize}
-Il est clair que $$ \max(-1, -1, 10) + \max(-1, 1, 10) = 10 \neq 0 = \max(-1-1, -1+1, -10 + 10)$$
-
+Il s'ensuit: 
+\begin{equation*}
+\begin{split}
+ v_n + v_n' &= \max(u_0, u_1, u_2) + \max(u_0', u_1', u_2') \\
+			&= \max(-1, -1, -10) + \max(-1, 1, 10) \\
+			&= 9 \\
+			&\neq \max(-1-1, -1+1, -10 + 10) = 1
+\end{split}
+\end{equation*}
 \item $v_n = u_{n-1}$: \newline
-linéaire car $\alpha u_{n-1} \rightarrow \alpha v_n$ \newline
-invariant par translation car $u_{n-1-\tau} \rightarrow v_{n-\tau}$ \newline
-réponse impulsionnelle: $h_{-1} = 1$
+La réponse est linéaire car $\alpha u_{n-1} \rightarrow \alpha v_n$ et invariante par translation \newline car $u_{n-1-\tau} \rightarrow v_{n-\tau}$ \newline
+De même que pour la question 1, la réponse impulsionnelle peut être donnée par identification du terme non-nul du produit de convolution: $h_{-1} = 1$
 \item $g(x) = \int_{x-\frac{1}{2}}^{x+\frac{1}{2}} f(t) \,\mathrm{d}t$: \newline
 La relation est linéaire par linéarité de l'intégration: $$\int_{x-\frac{1}{2}}^{x+\frac{1}{2}} f_1(t) + f_2(t) \,\mathrm{d}t = \int_{x-\frac{1}{2}}^{x+\frac{1}{2}} f_1(t) \,\mathrm{d}t+ \int_{x-\frac{1}{2}}^{x+\frac{1}{2}} f_2(t) \,\mathrm{d}t$$ \newline
 La relation est invariante par translation: soit l'entrée $f(t-\tau)$, \newline en posant $t' = t -\tau \implies \mathrm{d}t' = \,\mathrm{d}t $ $$\int_{x-\frac{1}{2}-\tau}^{x+\frac{1}{2}-\tau} f(t')\,\mathrm{d}t' \rightarrow g(x-\tau)$$
@@ -122,36 +128,43 @@ g(x) = \int_{x-\frac{1}{2}}^{x+\frac{1}{2}} f(t) \,\mathrm{d}t = \int_{-\infty}^
 \end{split}\end{equation*}
 Donc la réponse impulsionnelle s'écrit $h(t) = \mathds{1}\{t-x \in {[{-\frac{1}{2}}, \frac{1}{2}]}\}$
 \item $g(x) = \max\{f(t), t \in {[x-1, x+1]}\}$: \newline
-La réponse n'est ni linéaire, ni invariante par translation: considérons le contre-exemple $f(t) = t^2$ \newline
-
+La réponse n'est pas linéaire, en effet 
+\begin{equation*}\begin{split}
+\alpha_1 f_1(t) + \alpha_2 f_2(t) & \longrightarrow \max(\alpha_1 f_1(t), \alpha_2 f_2(t)) \\
+								  & \centernot\longrightarrow \alpha_1 \max(f_1(t)) + \alpha_2 \max(f_2(t))
+\end{split}\end{equation*}
+%De plus la réponse n'est pas invariante par translation.\newline
+%$$\max\{f(t-\tau), t \in {[x-1, x+1]}\} \centernot\rightarrow \max\{f(t), t \in {[x-1-\tau, x+1-\tau]}\}  $$
 \end{enumerate}
 \subsection*{Exercice 2}
 \begin{enumerate}
 \item $u_0 = 1, u_n = 0 \forall n \neq 0$: \newline
-$(u \otimes v)(n) = (u \otimes v)(n) = v_n = \sqrt{\log(\cos(3n)+2)}$ 
-\item L'on donne les termes de $w$ non-nuls:
+$w_1(n) = (u \otimes v)(n) = (v \otimes u)(n) = v_n = \sqrt{\log(\cos(3n)+2)}$ 
+\item $u_0 = 2, u_1 = - \frac{1}{2} , v_0 = 5, v_1 = 3, v_2 = 4$ \newline
+L'on donne les termes de $w(n)$ non-nuls ci-dessous:
 \begin{itemize}
-\item $w(0) = (u \otimes v)(0) = u(0) v(0)$
-\item $w(1) = (u \otimes v)(1) = u(0) v(1) + u(1) v(0)$
-\item $w(2) = (u \otimes v)(2) = u(1) v(1) + u(0) v(2)$
-\item $w(3) = (u \otimes v)(3) = u(1) v(1) + u(1) v(2)$
+\item $w_2(0) = u_0 v_0 = 10$
+\item $w_2(1) = u_0 v_1 + u_1 v_0 = 3.5$
+\item $w_2(2) = u_1 v_1 + u_0 v_2 = 6.5$
+\item $w_2(3) = u_1 v_1 + u_1 v_2 = - 3.5$
 \end{itemize}
-\item De même, les termes non-nuls sont:
+\item $u_{-1} = 2, u_0 = - \frac{1}{2} , v_0 = 5, v_1 = 3, v_2 = 4$ \newline
+De même, les termes non-nuls sont:
 \begin{itemize}
-\item $w(0) = (u \otimes v)(0) = u(0) v(0)$
-\item $w(1) = (u \otimes v)(1) = u(0) v(1) + u(1) v(0)$
-\item $w(2) = (u \otimes v)(2) = u(1) v(1) + u(0) v(2)$
-\item $w(3) = (u \otimes v)(3) = u(1) v(1) + u(1) v(2)$
+\item $w_3(-1) = u_0 v_1 + u_{-1} v_0 = 8.5$
+\item $w_3(0) = u_0 v_0 + u_{-1} v_1 = 2.5$
+\item $w_3(1) = u_{-1} v_2 + u_0 v_1 = 6.5$
+\item $w_3(2) = u_0 v_2 = -2$
 \end{itemize}
-\item Encore, les termes non-nuls sont:
-\begin{itemize}
-\item $w(0) = (u \otimes v)(0) = u(0) v(0)$
-\item $w(1) = (u \otimes v)(1) = u(0) v(1) + u(1) v(0)$
-\item $w(2) = (u \otimes v)(2) = u(1) v(1) + u(0) v(2)$
-\item $w(3) = (u \otimes v)(3) = u(1) v(1) + u(1) v(2)$
-\end{itemize}
+\item En remarquant que les termes des suites $u$ et $v$ sont la somme des termes des suites des deux question précédentes, la distributivité du produit de convolution donne: $w_4(n) = w_2(n) + w_3(n), \; \forall n \in \mathcal{D}(w_2) \cup \mathcal{D}(w_3)$ où $\mathcal{D}$ est le domaine de définition de chaque suite.
 \item $u_n = (-\frac{1}{2})^n, \; n \in \mathbb{N}, \text{sinon} \; u_n = 0$ et $v_0 = 1, v_1 = \frac{1}{2}$: \newline
-$$ (u \otimes h)(n) = \sum_{k \in \mathbb{Z}} u_{n-k}h_k $$
+En ne gardant que les termes non-nuls du produit de convolution et en factorisant par $(-\frac{1}{2})^{n-1}$
+\begin{equation*}\begin{split}
+(u \otimes v)(n) &= \sum_{k \in \mathbb{Z}} u_{n-k}v_k \\
+		w(n)	 &= (-\frac{1}{2})^n + (\frac{1}{2})(-\frac{1}{2})^{n-1} \\
+				 &= (-\frac{1}{2})^{n-1}(\frac{1}{2}-\frac{1}{2}) \\
+				 &= 0
+\end{split}\end{equation*}
 \end{enumerate}
 
 \section*{Résultats de rotation}
