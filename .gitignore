@@ -1,7 +1,8 @@
 *.zip
+octave_workspace
 TP1/
-*.jpeg
-*.png
-*.jpg
-*.bmp
-*.gif
+
+
+
+
+
