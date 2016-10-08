@@ -27,15 +27,11 @@
 \begin{document}
 \maketitle
 
-\begin{abstract}
-L'objectif de ce TP est de calculer des convolutions, vérifier la validité de filtres linéaires, extraire leur réponse impulsionnelle. Par ailleus nous mettons en pratique la méthode de rotation par distortion de L.Yarolavsky.
-\end{abstract}
-
-\section*{Introduction}
-Nous avons donné, lors du TP précédent, l'idée d'algorithme faisant une rotation efficace dans l'espace réel par succession de translations dans le domaine de Fourier. Par souçis de complétude, nous la ré-écrivons ci-suit.
-
 \section{Rotation d'image}
-Pour chaque point $(x, y)$ de l'image originale nous souhaitons utiliser la TFD pour calculer le point $(x', y')$ résultant d'une rotation d'angle  $\theta \in {[0, 2\pi]}$. L'on peut définir la rotation par la matrice \textbf{M} ci-dessous:
+
+\subsection{Introduction} 
+
+Pour chaque point $(x, y)$ de l'image originale nous souhaitons utiliser la TFD pour calculer le point $(x', y')$ résultant d'une rotation d'angle  $\theta \in {[0, 2\pi]}$. On peut définir la rotation par la matrice \textbf{M} ci-dessous:
 $$\begin{pmatrix}
 x' \\ y'
 \end{pmatrix}=
@@ -68,25 +64,62 @@ $$
 L'idée de \cite{unser95} \cite{larkin97} est d'utiliser trois convolutions linéaires (et donc séparables) qui distordent l'image successivement selon les axes $x$, $y$ et $x$. 
 Chacune s'écrit comme une translation dans le domaine de Fourier. La distortion $u_{dx}(x, y) = u(x + ay, y)$ pour l'axe $x$ (où $a$ contrôle l'angle) s'exprime par l'opérateur suivant:
 $$ D_x(\xi) = \mathcal{F}\{u_d(x, y)\} = \mathcal{F}\{u(x, y)\} e^{-2 i \pi \xi a y}$$
-Le signal réel distordu sur $x$ par la transformée inverse : $ u_{dx}(x, y) = \mathcal{F}^{-1}\{D_x(\xi) \} $ \newline
-Si l'on répête cette opération pour $y$ et encore une fois pour $x$ l'on retrouve le signal réel pivoté. Il s'agit bien de trois translations, donc un algorithme efficace qui les effectue peut être donné. A noter que cette méthode induit une perte d'information près des bords, il convient donc d'insérer l'image originale dans un cadre. \newline
+
+
+Si l'on répête cette opération pour $y$ et encore une fois pour $x$ l'on retrouve le signal réel pivoté. L'image originale est insérée dans une image plus grande afin de ne pas être tronquée. \newline
+
+\subsection{Experimentations}
+
 Les expériences suivantes ont été menées : 
 \begin{itemize}
 \item Rotations d'images avec des images bruitées et non bruitées.
 \item N rotations d'angle $\frac{2\pi}{N}$ successives d'une même image. 
 \end{itemize}
 
-Différentes valeurs d'angle ont été testées et donnent de donnent de bons résultats avec que l'image soit bruité ou non. Néanmoins pour un angle de $\frac{\pi}{3}$, deux des coins de l'image sont détâchées. La raison n'a pas pu être trouvée à l'heure de la rédaction de ce rapport. 
+\subsubsection{Rotations simples}
 
-Une séquence de rotation d'angle $\frac{2\pi}{N}, \;(N = 5) $ a été effectuée : l'image résultant de la séquence de rotation est similaire à l'image originale. 
 
-\subsection*{Discussion}
+L'algorithme a été testé pour plusieurs valeurs d'angles sur des images bruitées ou non. Dans le cas général il donne fonctionne correctement en conservant la qualité de l'image initiale. Néanmoins pour $\theta = \frac{2\pi}{3}$ les bords de l'image se détachent. Il n'a pas été possible de trouver la cause du problème. 
+pour $\theta = \pi$ l'algorithme ne fonctionne pas comme cela a été annoncé dans le cours. 
+
+\begin{figure}[h]
+	\includegraphics[width=0.25\textwidth]{castle_bruite_2pi_over_8.png}
+	\includegraphics[width=0.20\textwidth]{house_rotation_2pi_over_7.png}
+    \includegraphics[width=0.20\textwidth]{house_rotation_2pi_over_3.png}
+    \includegraphics[width=0.20\textwidth]{house_rotation_pi.png}
+    \caption{De gauche à droite : $\theta = \frac{2\pi}{8}$, $\theta = \frac{2\pi}{7}$, $\theta = \frac{2\pi}{3}$, $\theta = \pi$. }
+    
+\end{figure}
+
+
+
+\subsubsection{Rotation multiple d'une image}
+
+Une succession de rotation d'angle $\theta = \frac{2\pi}{N}$ a été effectuée sur une image afin de pouvoir comparer l'image originale et l'image après N rotations. 
+
+\begin{figure}[h]
+	\includegraphics[width=0.15\textwidth]{lena.png}
+	\includegraphics[width=0.15\textwidth]{rotation_2pi_1.png}
+	\includegraphics[width=0.15\textwidth]{rotation_2pi_2.png}
+	\includegraphics[width=0.15\textwidth]{rotation_2pi_3.png}
+	\includegraphics[width=0.15\textwidth]{rotation_2pi_4.png}
+	\includegraphics[width=0.15\textwidth]{rotation_2pi_5.png}
+  \caption{A gauche l'image originale, à droite les rotations successives d'angle $\theta = \frac{2\pi}{5}$.}
+\end{figure}
+
+On constate que l'image a une qualité sembable à celle de l'originale. 
+
+\subsection{Discussion}
+
 L'implémentation de l'algorithme souffre des limites suivantes : 
 \begin{itemize}
-\item Le problème de l'angle de $\frac{\pi}{3}$.
-\item Il ne gère pas les angles $\frac{k\pi}{2}$ où il est possible de se passer du traitement de fourier.
+
+\item Il ne gère pas les angles $\frac{k\pi}{2}$ où serait en fait possible de se passer de la transformée de fourier et éviter le problème de rotation de $theta =  k\pi$.
 \item Le zero-padding utilisé  inclut l'image originale dans une image aggrandie par un facteur constant. Il y a donc bien plus de zero que nécessaire : il serait avantageux de raboter l'image afin que la taille de l'image soit définie par les coin de l'image originale. En effet dans l'expérience de rotation successive, la taille de l'image à l'étape i est zoom$^i$ ce qui rend l'expérience impossible à pratiquer pour de grandes valeurs de $N$.
+\item Le problème de l'angle de $\frac{k\pi}{3}$ où deux des coins de l'image se détachent.
+
 \end{itemize}
+
 \section{Exercices}
 
 Notons le signal d'entrée $e(t)$ et le signal de sortie $s(t)$.
@@ -186,18 +219,7 @@ En ne gardant que les termes non-nuls du produit de convolution et en factorisan
 \end{split}\end{equation*}
 \end{enumerate}
 
-\section*{Résultats de rotation}
-L'image de gauche est Lena originale puis chaque image est le résultat d'une rotation d'angle $\theta = \frac{2\pi}{5}$.
 
-\begin{figure}[h]
-	\includegraphics[width=0.15\textwidth]{lena.png}
-	\includegraphics[width=0.15\textwidth]{rotation_2pi_1.png}
-	\includegraphics[width=0.15\textwidth]{rotation_2pi_2.png}
-	\includegraphics[width=0.15\textwidth]{rotation_2pi_3.png}
-	\includegraphics[width=0.15\textwidth]{rotation_2pi_4.png}
-	\includegraphics[width=0.15\textwidth]{rotation_2pi_5.png}
-  \caption{Image originale, images après rotations}
-\end{figure}
 
 \begin{thebibliography}{2}
 
