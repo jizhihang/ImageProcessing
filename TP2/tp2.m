@@ -182,3 +182,22 @@ testTranslation(img, translation1);
 
 zoom = 2;
 %testZoom(img, zoom);
+
+
+
+mkdir("output")
+mkdir("output/translation")
+mkdir("output/zoom")
+
+images = readdir("images")
+images = images(3: length(images))
+
+
+for iImg  = length(images)
+
+  imgFile = images(iImg)
+  img = imread(imgFile)
+  img = translateImage(img, [10 * iImg, 10 * iImg]) 
+  imwrite("output/zoom/" + img, translated)
+  
+endfor
