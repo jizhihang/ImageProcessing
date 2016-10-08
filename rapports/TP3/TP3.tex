@@ -12,7 +12,7 @@
 \usepackage{helvet} % police helvetica %
 \usepackage{graphicx}
 \usepackage{centernot}
-
+\usepackage{dsfont}
 % modification des dimensions de la page et de son centrage %
 \topmargin -2.0cm
 \oddsidemargin 0.2cm
@@ -114,10 +114,15 @@ linéaire car $\alpha u_{n-1} \rightarrow \alpha v_n$ \newline
 invariant par translation car $u_{n-1-\tau} \rightarrow v_{n-\tau}$ \newline
 réponse impulsionnelle: $h_{-1} = 1$
 \item $g(x) = \int_{x-\frac{1}{2}}^{x+\frac{1}{2}} f(t) \,\mathrm{d}t$: \newline
-linéarité de l'intégration: $\int_{x-\frac{1}{2}}^{x+\frac{1}{2}} f_1(t) + f_2(t) \,\mathrm{d}t = \int_{x-\frac{1}{2}}^{x+\frac{1}{2}} f_1(t) \,\mathrm{d}t+ \int_{x-\frac{1}{2}}^{x+\frac{1}{2}} f_2(t) \,\mathrm{d}t$ \newline
-invariant par translation: soit l'entrée $f(t-\tau)$, en posant $t' = t -\tau \implies \mathrm{d}t' = \,\mathrm{d}t $ \newline $\int_{x-\frac{1}{2}-\tau}^{x+\frac{1}{2}-\tau} f(t')\,\mathrm{d}t' \rightarrow g(x-\tau)$
+La relation est linéaire par linéarité de l'intégration: $$\int_{x-\frac{1}{2}}^{x+\frac{1}{2}} f_1(t) + f_2(t) \,\mathrm{d}t = \int_{x-\frac{1}{2}}^{x+\frac{1}{2}} f_1(t) \,\mathrm{d}t+ \int_{x-\frac{1}{2}}^{x+\frac{1}{2}} f_2(t) \,\mathrm{d}t$$ \newline
+La relation est invariante par translation: soit l'entrée $f(t-\tau)$, \newline en posant $t' = t -\tau \implies \mathrm{d}t' = \,\mathrm{d}t $ $$\int_{x-\frac{1}{2}-\tau}^{x+\frac{1}{2}-\tau} f(t')\,\mathrm{d}t' \rightarrow g(x-\tau)$$
+Afin de calculer la réponse impulsionnelle, considérons la fonction porte suivante: $\Pi(x, t) = \mathds{1}\{t-x \in {[{-\frac{1}{2}}, \frac{1}{2}]}\}$ \newline
+\begin{equation*}\begin{split}
+g(x) = \int_{x-\frac{1}{2}}^{x+\frac{1}{2}} f(t) \,\mathrm{d}t = \int_{-\infty}^{\infty} f(t) \Pi(x, t) \,\mathrm{d}t = (f \otimes \Pi(x, t))(x).
+\end{split}\end{equation*}
+Donc la réponse impulsionnelle s'écrit $h(t) = \mathds{1}\{t-x \in {[{-\frac{1}{2}}, \frac{1}{2}]}\}$
 \item $g(x) = \max\{f(t), t \in {[x-1, x+1]}\}$: \newline
-ni linéaire, ni invariant par translation: contre-exemple $f(t) = t^2$ \newline
+La réponse n'est ni linéaire, ni invariante par translation: considérons le contre-exemple $f(t) = t^2$ \newline
 
 \end{enumerate}
 \subsection*{Exercice 2}
