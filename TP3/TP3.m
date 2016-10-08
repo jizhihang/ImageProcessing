@@ -14,22 +14,26 @@ image = recalage_zero(image,2);
 
 %3 translations according to the Yaroslavski formula
 
-
+size(image)
 %first translation
 for i=1:N
     
-vect_transl = [0,-(i-halfCol)*tan(theta/2)];
+vect_transl = [-(i-halfCol)*tan(theta/2), 0];
 
-image(i,:,:)=translation_vect(image(i,:,:),vect_transl);
+
+translation = translation_vect(image(:,i,:),vect_transl);
+
+%size(translation)
+image(:,i,:)=translation;
 
 end 
 % second translation
 
 for i=1:M
     
-vect_transl = [(i-halfRow)*sin(theta),0];
+vect_transl = [0, (i-halfRow)*sin(theta)];
 
-image(:,i,:)=translation_vect(image(:,i,:),vect_transl);
+image(i,:,:)=translation_vect(image(i,:,:),vect_transl);
 
 end 
 
@@ -37,9 +41,9 @@ end
 
 for i=1:N
     
-vect_transl = [0,-(i-halfCol)*tan(theta/2)];
+vect_transl = [-(i-halfCol)*tan(theta/2), 0];
 
-image(i,:,:)=translation_vect(image(i,:,:),vect_transl);
+image(:,i,:)=translation_vect(image(:,i,:),vect_transl);
 
 end 
 
