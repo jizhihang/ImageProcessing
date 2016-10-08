@@ -34,7 +34,7 @@ L'objectif de ce TP est de calculer des convolutions, vérifier la validité de 
 \section*{Introduction}
 Nous avons donné, lors du TP précédent, l'idée d'algorithme faisant une rotation efficace dans l'espace réel par succession de translations dans le domaine de Fourier. Par souçis de complétude, nous la ré-écrivons ci-suit.
 
-\section*{Rotation d'image}
+\section{Rotation d'image}
 Pour chaque point $(x, y)$ de l'image originale nous souhaitons utiliser la TFD pour calculer le point $(x', y')$ résultant d'une rotation d'angle  $\theta \in {[0, 2\pi]}$. L'on peut définir la rotation par la matrice \textbf{M} ci-dessous:
 $$\begin{pmatrix}
 x' \\ y'
@@ -69,9 +69,25 @@ L'idée de \cite{unser95} \cite{larkin97} est d'utiliser trois convolutions lin�
 Chacune s'écrit comme une translation dans le domaine de Fourier. La distortion $u_{dx}(x, y) = u(x + ay, y)$ pour l'axe $x$ (où $a$ contrôle l'angle) s'exprime par l'opérateur suivant:
 $$ D_x(\xi) = \mathcal{F}\{u_d(x, y)\} = \mathcal{F}\{u(x, y)\} e^{-2 i \pi \xi a y}$$
 Le signal réel distordu sur $x$ par la transformée inverse : $ u_{dx}(x, y) = \mathcal{F}^{-1}\{D_x(\xi) \} $ \newline
-Si l'on répête cette opération pour $y$ et encore une fois pour $x$ l'on retrouve le signal réel pivoté. Il s'agit bien de trois translations, donc un algorithme efficace qui les effectue peut être donné. A noter que cette méthode induit une perte d'information près des bords, il convient donc d'insérer l'image originale dans un cadre.
+Si l'on répête cette opération pour $y$ et encore une fois pour $x$ l'on retrouve le signal réel pivoté. Il s'agit bien de trois translations, donc un algorithme efficace qui les effectue peut être donné. A noter que cette méthode induit une perte d'information près des bords, il convient donc d'insérer l'image originale dans un cadre. \newline
+Les expériences suivantes ont été menées : 
+\begin{itemize}
+\item Rotations d'images avec des images bruitées et non bruitées.
+\item N rotations d'angle $\frac{2\pi}{N}$ successives d'une même image. 
+\end{itemize}
 
-\section*{Exercices}
+Différentes valeurs d'angle ont été testées et donnent de donnent de bons résultats avec que l'image soit bruité ou non. Néanmoins pour un angle de $\frac{\pi}{3}$, deux des coins de l'image sont détâchées. La raison n'a pas pu être trouvée à l'heure de la rédaction de ce rapport. 
+
+Une séquence de rotation d'angle $\frac{2\pi}{N}, \;(N = 5) $ a été effectuée : l'image résultant de la séquence de rotation est similaire à l'image originale. 
+
+\subsection*{Discussion}
+L'implémentation de l'algorithme souffre des limites suivantes : 
+\begin{itemize}
+\item Le problème de l'angle de $\frac{\pi}{3}$.
+\item Il ne gère pas les angles $\frac{k\pi}{2}$ où il est possible de se passer du traitement de fourier.
+\item Le zero-padding utilisé  inclut l'image originale dans une image aggrandie par un facteur constant. Il y a donc bien plus de zero que nécessaire : il serait avantageux de raboter l'image afin que la taille de l'image soit définie par les coin de l'image originale. En effet dans l'expérience de rotation successive, la taille de l'image à l'étape i est zoom$^i$ ce qui rend l'expérience impossible à pratiquer pour de grandes valeurs de $N$.
+\end{itemize}
+\section{Exercices}
 
 Notons le signal d'entrée $e(t)$ et le signal de sortie $s(t)$.
 
@@ -183,8 +199,6 @@ L'image de gauche est Lena originale puis chaque image est le résultat d'une ro
   \caption{Image originale, images après rotations}
 \end{figure}
 
-
-\newpage
 \begin{thebibliography}{2}
 
 \bibitem{unser95}
