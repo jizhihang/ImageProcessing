@@ -1,5 +1,7 @@
-%clear all;
-%close all;
+clc
+clear all
+close all
+
 addpath(pwd)
 
 function plot2D_FFT(fft)
@@ -120,6 +122,23 @@ function I_hat_zoom = zeroPadding(image, zoom)
   I_hat_zoom = zoom^2 * real(ifft2(I_hat_zoom)) / 255;
 endfunction
 
+function padded = zeroPadding(image, nPadding)
+
+  ftImage = fft2(image);
+  
+  nRow = size(image, 1);
+  nCol = size(image, 2);
+           
+  padded=[ftImage(1:nRow / 2, 1:nCol/2), zeros(nRow / 2, nPadding(1)), ftImage(1:nRow / 2, nCol/2 +1 : nCol)];
+  
+  padded=[padded; zeros(nPadding(2), size(padded, 2))];
+  
+  padded=[padded; ftImage(nRow / 2 + 1:nCol, 1:nCol/2), zeros(nRow / 2, nPadding(1)), ftImage(nRow /2 +1:nRow, nCol / 2 + 1:nCol)];
+    
+  padded =real( ifft2(padded)) / 255 ;
+  
+endfunction
+
 %%% --------------------- Patch extraction (Care: No size checks)
 
 % Helper function to get a patch of (w, h) from the image
@@ -199,3 +218,32 @@ for i=1:size(zooms,2)
   %testZoom(filename, patch, zooms(i));
   testZoom(filename, img, zooms(i));
 endfor
+
+%chargement de l'image
+% lena = imread('images/lena.bmp');
+% figure(1); %originale
+% imshow(lena);
+
+translation = [50.5, 50.5];
+a = translateImage(lena, translation);
+
+figure(2);
+imshow(a);
+
+zoom = size(lena);
+a = zeroPadding(lena, zoom);
+s = size(a)
+figure(6)
+imshow(a)
+
+translation = [50.5, 50.5];
+a = translateImage(lena, translation);
+
+figure(2);
+imshow(a);
+
+zoom = size(lena);
+a = zeroPadding(lena, zoom);
+s = size(a)
+figure(6)
+imshow(a)
