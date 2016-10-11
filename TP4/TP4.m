@@ -10,4 +10,11 @@ figure; title("Laplacian Sharpening");
 imshow(sharped);
 
 
+unzoom = 1.01;
+sig = 0.8 * sqrt(unzoom^2 -1);
+gaussianFiltered = gaussianFilter(image, sig);
+figure; title("Gaussian filtering");
+imshow(gaussianFiltered);
+
+
 pause
