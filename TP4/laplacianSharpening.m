@@ -1,4 +1,4 @@
-function image = laplacianSharpening(image, n, epsilon = 0.01)
+function image = laplacianSharpening(image, n, epsilon)
 
   laplacien_x = ones(size(image));
 
@@ -15,5 +15,15 @@ function image = laplacianSharpening(image, n, epsilon = 0.01)
     image = image - epsilon * (laplacien_x + laplacien_y);
 
   end
+[a,b,c] = size(image);
 
-endfunction
+a=a-2*n;
+b=b-2*n;
+
+new_image=zeros(a,b,3);
+new_image(:,:,:)=image(n+1:end-(n),n+1:end-(n),:)
+
+
+image=new_image;
+
+end

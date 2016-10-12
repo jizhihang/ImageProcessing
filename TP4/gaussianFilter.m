@@ -1,4 +1,4 @@
-function image = gaussianFilter(image, sig)
+function image = gaussianFilter(image, sig, halfRow, halfCol)
 
   MINUS_TWO_PI_SQUARED = - 2 * pi ^ 2;
 
@@ -9,6 +9,9 @@ function image = gaussianFilter(image, sig)
   Nr = ifftshift((-fix(M/2):ceil(M/2) - 1));
   Nc = ifftshift((-fix(N/2):ceil(N/2) - 1));
 
+  Nr=Nr-halfRow;
+  Nc=Nc-halfCol;
+  
   [Nc, Nr] = meshgrid(Nc, Nr);
 
   ftImage = ftImage .* repmat( exp( MINUS_TWO_PI_SQUARED * sig * (Nr .^ 2 / M + Nc .^ 2 / N)), [1, 1, n_channel]);
