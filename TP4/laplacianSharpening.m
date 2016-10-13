@@ -21,7 +21,7 @@ a=a-2*n;
 b=b-2*n;
 
 new_image=zeros(a,b,3);
-new_image(:,:,:)=image(n+1:end-(n),n+1:end-(n),:)
+new_image(:,:,:)=image(n+1:end-(n),n+1:end-(n),:);
 
 
 image=new_image;

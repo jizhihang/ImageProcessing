@@ -2,7 +2,7 @@ clear all
 close all
 clc
 
-image = double(imread('input/Monet_Les_Nympheas.jpg')) / 255;
+image = double(imread('input/lena.bmp')) / 255;
 [nRow, nCol, ch] = size(image);
 
 [halfRow,halfCol] = compute_center(nRow, nCol);
@@ -15,11 +15,13 @@ image = double(imread('input/Monet_Les_Nympheas.jpg')) / 255;
 % figure; title('Laplacian Sharpening');
 % imshow(sharped);
 
-unzoom = 2;
+unzoom = 2 ;
 sig = 0.8 * sqrt(unzoom^2 -1);
-gaussianFiltered = gaussianFilter(image, sig, halfRow, halfCol);
+gaussianFiltered = gaussianFilter(image, sig);
 
-image=undersampling(image);
+% image=undersampling(image);
+image=undersampling(gaussianFiltered);
+
 
 figure; title('Gaussian filtering');
 imshow(real(gaussianFiltered));
