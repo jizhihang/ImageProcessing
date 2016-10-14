@@ -14,8 +14,7 @@ function image = gaussianFilter(image, sig)
   
   [Nc, Nr] = meshgrid(Nc, Nr);
 
-  ftImage = ftImage .* repmat( exp( MINUS_TWO_PI_SQUARED * sig * sig * (Nr .^ 2 / M + Nc .^ 2 / N)), [1, 1, n_channel]);
-
-  image = ifft2(ftImage);
+ftImage = ftImage .* repmat( exp( MINUS_TWO_PI_SQUARED * sig * sig * ((Nr/M) .^ 2 + (Nc/N) .^ 2)), [1, 1, n_channel]);
+ image = ifft2(ftImage);
 
 end
