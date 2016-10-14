@@ -1,0 +1,66 @@
+\documentclass{article}
+% ----- Preamble
+\usepackage[utf8]{inputenc} % police encodee en latin1=iso8859-1=Windows Latin 1 %
+\usepackage[french]{babel} % police fr %
+\usepackage{hyperref} % pour les references %
+\usepackage{amsmath} % pour les formules de maths %
+\usepackage{amssymb} % pour les symboles maths %
+\usepackage{amsthm} % pour la mise en forme des theoremes %
+\usepackage{aeguill} % pour les guillemets et accents francais %
+\usepackage{listings} % pour les listings de code %
+\usepackage{helvet} % police helvetica %
+\usepackage{graphicx}
+\usepackage{centernot}
+\usepackage{dsfont}
+% modification des dimensions de la page et de son centrage %
+\topmargin 0.0cm
+\oddsidemargin 0.2cm
+\textwidth 16cm 
+\textheight 21cm
+\footskip 0.0cm
+
+\title{Traitement d'Image et du Signal - TP4 \\ Transformée en Z}
+\author{Laurent Cetinsoy, Karim Kouki, Aris Tritas }
+\date{\today}
+
+\begin{document}
+\maketitle
+\section*{Introduction}
+\section{$H(z) = 1 - \frac{1}{2}z^{-1}$}
+\subsection*{Réponse impulsionnelle}
+$H(z) = \displaystyle\sum_{n \in \mathbb{Z}}{(h_n  \: z^{-1})^{n}}$ donc par identification:
+$h_0 = 1, h_1 = -\frac{1}{2}z^{-1}$
+\subsection*{Equation de récurrence}
+$y_n = \displaystyle\sum_{k \in \mathbb{Z}}{h_n  \: x_{n-k}}$ donc par identification:
+$y_n = x_n - \frac{1}{2}x_{n-1}$
+\subsection*{Causalité}
+La suite $h$ est \textbf{causale}: $h_n = 0 \;,\; \forall n < 0$
+\section{$H(z) = 1 +2z^{-1} +3z^{-2}$}
+\subsection*{Réponse impulsionnelle}
+$h_0 = 1, h_1 = 2z^{-1}, h_2 = 3z^{-2}$
+\subsection*{Equation de récurrence}
+$y_n = x_n +2x_{n-1} +3x_{n-2}$
+\subsection*{Causalité}
+La suite $h$ est \textbf{causale}
+\section{$H(z) = \frac{1}{1 - \frac{1}{2}z^{-1}}$}
+\subsection*{Réponse impulsionnelle}
+
+$H(z) = \frac{1}{1 - \frac{1}{2}z^{-1}} = \displaystyle\sum_{n \in \mathbb{N}}{(\frac{1}{2}z^{-1})^{n}} = \displaystyle\sum_{n \in \mathbb{N}}{(\frac{1}{2})^n z^{-n}}$ (que l'on peut écrire car $ |\frac{1}{2}| < 1)$ \\ $\implies h_n = (\frac{1}{2})^n \;,\; \forall n \geq 0$
+\subsection*{Equation de récurrence}
+$y_n - \frac{1}{2}y_{n-1}= x_n$
+\subsection*{Causalité}
+La suite est \textbf{causale}
+\section{$H(z) = \frac{1}{1 - 2z^{-1}}$}
+\subsection*{Réponse impulsionnelle}
+\begin{equation*}\begin{split} 
+H(z) &= \frac{1}{1 - 2z^{-1}} = \frac{1}{z^{-1}(z-2)} = \frac{z}{2(\frac{1}{2}z-1)} = -\frac{z}{2} \frac{1}{1-\frac{1}{2}z} \\
+&= -\frac{z}{2} \displaystyle\sum_{n=0}^\infty{(\frac{1}{2}z)^{n}} \\
+&= -\displaystyle\sum_{n=0}^\infty{(\frac{1}{2}z)^{n+1}} \\
+&= -\displaystyle\sum_{m=1}^\infty{(\frac{1}{2}z)^{m}} \hspace{20pt} m = n+1\\
+&= -\displaystyle\sum_{k=-\infty}^{-1}{(\frac{1}{2}z)^{-k}} \hspace{8pt} k = -m
+\end{split}\end{equation*}
+Donc $h_n = -(\frac{1}{2})^n \;,\; \forall n < 0$
+\subsection*{Equation de récurrence}
+\subsection*{Causalité}
+La suite est \textbf{anti-causale}
+\end{document}
