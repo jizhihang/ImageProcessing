@@ -1,0 +1,52 @@
+\documentclass{article}
+% ----- Preamble
+\usepackage[utf8]{inputenc} % police encodee en latin1=iso8859-1=Windows Latin 1 %
+\usepackage[french]{babel} % police fr %
+\usepackage{hyperref} % pour les references %
+\usepackage{amsmath} % pour les formules de maths %
+\usepackage{amssymb} % pour les symboles maths %
+\usepackage{amsthm} % pour la mise en forme des theoremes %
+\usepackage{aeguill} % pour les guillemets et accents francais %
+\usepackage{listings} % pour les listings de code %
+\usepackage{helvet} % police helvetica %
+\usepackage{graphicx}
+\usepackage{centernot}
+\usepackage{dsfont}
+% modification des dimensions de la page et de son centrage %
+\topmargin 0.0cm
+\oddsidemargin 0.2cm
+\textwidth 16cm 
+\textheight 21cm
+\footskip 0.0cm
+
+\title{Traitement d'Image et du Signal - TP5}
+\author{Laurent Cetinsoy, Karim Kouki, Aris Tritas }
+\date{\today}
+
+\begin{document}
+\maketitle
+\begin{enumerate}
+\item Appliquer l'égalisation d'histogramme à quelques images. On pourra
+utiliser une commande Matlab (il faut la chercher!) pour l'égalisation
+(elle fait tout).
+\item Implémenter la méthode midway. On pourra prendre des paires d'images
+que l'on a pris sois même et/ou celle dans l'archive "images.zip".
+
+On pourra se restreindre au cas où les deux images ont même taille pour
+profiter de l'implémentation avec les tris.
+
+\item  Observer une image (e.g. 256x256) qui est la réalisation, en chaque
+pixel, de variables aléatoires gaussiennes (centrées en 1/2) i.i.d pour
+quelques écarts-types (1/100,1/10,1). Dynamique signal: [0,1].
+
+\item Répondre aux questions du document bilateral\_filter\_2016.pdf et en
+déduire l'implémentation du filtre bilatéral. Vous pourrez vous aider du
+squelette dans ?
+
+(On pourra en profiter pour visualiser l'histogramme de l'image
+originale et le comparer à l'histogramme de l'image bruitée).
+
+\item Comparer le zoom par zéro padding et le zoom par transformée en
+cosinus discret implicite.
+\end{enumerate}
+\end{document}
