@@ -1,0 +1,36 @@
+Chers Élèves,
+
+Le site web est à jour avec les notes de cours d'aujourd'hui. 
+La prochaine fois nous traiterons du filtrage des processus stochastiques discrets, ce qui nous conduira jusqu'à 
+la construction du filtre de Wiener. Les notes de cours afférentes seront disponibles lundi en fin d'après midi.
+D'ici là, si vous souhaitez vous préparer vous pouvez regarder les définitions suivantes sur (e.g.) wikipedia ou
+ autres : variable aléatoire, espérance, variance. (le 3) du TP devrait aussi être utile).
+
+Bien cordialement,
+
+Yohann Tendero
+
+%%%%%%%%%%%%%% TRAVAIL POUR LE 22 Oct. %%%%%%%%%%%%%%%%%
+
+1) Appliquer l'égalisation d'histogramme à quelques images. On pourra utiliser une commande Matlab 
+(il faut la chercher!) pour l'égalisation (elle fait tout).
+    histeq.m
+attention, par défaut, images échantillonnées sur  64 valeurs.
+
+	
+2) Implémenter la méthode midway. On pourra prendre des paires d'images que l'on a pris sois même et/ou celle dans l'archive
+ "images.zip"
+
+On pourra se restreindre au cas où les deux images ont même taille pour profiter de l'implémentation avec les tris.
+
+3) Observer une image (e.g. 256x256) qui est la réalisation, en chaque pixel, de variables aléatoires gaussiennes 
+(centrées en 1/2) i.i.d pour quelques écarts-types (1/100,1/10,1). Dynamique signal: [0,1].
+
+4) Répondre aux questions du document bilateral_filter_2016.pdf et en déduire l'implémentation du filtre bilatéral. 
+Vous pourrez vous aider du squelette dans
+
+(On pourra en profiter pour visualiser l'histogramme de l'image originale et le comparer à l'histogramme de l'image bruitée).
+
+5) Comparer le zoom par zéro padding et le zoom par transformée en cosinus discret implicite.
+
+y = dct(x)
