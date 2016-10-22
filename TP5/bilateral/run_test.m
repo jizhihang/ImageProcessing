@@ -13,3 +13,5 @@ B = bilateral_filter(A,3,2,30);
 
 figure;
 imshow(B)
+
+pause

@@ -9,7 +9,7 @@ matfiles = dir(fullfile('C:/users/Karim Kouki/Desktop/Master AIC/Traitement du s
 images={};
 
 for i=3 : numel(matfiles)
-   
+
 images{i} = double(imread(matfiles(i).name))/255;
 images{i} = mean(images{i},3);
 end
@@ -29,7 +29,7 @@ figure;
 
 end
 % I=images{1,3};
-% 
+%
 %     equalized = histeq(I);
 
 
