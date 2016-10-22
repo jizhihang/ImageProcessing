@@ -27,43 +27,80 @@
 \maketitle
 
 \section{Egalisation d'histogramme}
+La libraire standard Octave implemente la fonction \textsf{histeq} 
+\section{Méthode dite du Midway}
+Nous proposons d'utiliser une image en niveaux de gris, et une autre en couleur.
 
-\section{Méthode Midway}
+\section{Images de bruit}
+Chacune des images ci-dessous ont des pixels distribués selon la loi normale: $I \sim \mathcal{N}(\frac{1}{2}, \sigma^2)$
 
-\section{Images aléatoires}
+\begin{figure}[h]
+	\includegraphics[width=0.33\textwidth]{noise001.png}
+	\includegraphics[width=0.33\textwidth]{noise01.png}
+	\includegraphics[width=0.33\textwidth]{noise10.png}
+  \caption{De gauche à droite $\sigma^2 = \frac{1}{100}, \frac{1}{10}, 1$}
+\end{figure}
 
-On observe des images dont les pixel sont tous issus de réalisations  pour d'une même loi lois normales $P ~ \N(0.5, \sigma)$ avec $\sigma = 1/100, 1/10, 1$ respectivement. 
+\section{Filtre bilatéral}
+L'objectif est d'implémenter une forme simple du filtre bilatéral.
+\subsection{Implémentation}
+\subsubsection*{Q1}
+$$w \in \mathbb{N}^+ \;, \; y \in \Omega(p) \rightarrow (y-p) \in {[{-w}, w]}^2$$
+\subsubsection*{Q2}
+Soit $\Omega(p) \ni y \rightarrow f_s(\parallel y-p \parallel_{\ell^2})$. 
+D'après la question précédente: $ 0 \leq \parallel y-p \parallel_{\ell^2} \leq 2 w^2 $
 
+Or $f_s$ est décroissante sur $\mathbb{R}_+$, donc: $$\exp(-(\frac{w}{\sigma_s})^2) \leq f_s(\parallel y-p \parallel_{\ell^2}) \leq 0 $$
 
+\subsubsection*{Q3} D'après l'équation 3, nous avons besoin des points du sous-ensemble ci-dessous pour calculer $u_\text{denoised}(p)$ avec p fixé: 
 
+$$\big \{ \: u(y_1, y_2) \;|\; y_1 \in {[p_1 - w, p_1 + w]}, \; y_2 \in {[p_2 - w, p_2 + w]}\: \big \}  $$
 
-\section{Bilateral filter}
+\textbf{Remarque: } Il s'agit d'une fenêtre carrée de taille fixe autour du pixel d'intérêt.
+\subsubsection*{Q4}
+Les conditions que les indices $p_1$ et $p_2$ doivent satisfaire sont:
+ $$p_i + w < N \;\text{et}\; p_i - w > 0 \;,\; i \in \{1, 2\} \rightarrow p_1, p_2 \in {[w, N-w]}$$
+\subsubsection*{Q5}
+On pose les changements de variable: $i_1 = y_1 - p_1 + w + 1$ et $i_2 = y_2 - p_2 + w + 1$
+Ainsi, par ré-indexation, on réécrit l'équation (3):
+\begin{equation*}\begin{split}
+u_\text{denoised}(p_1, p_2) = \frac{1}{C} \displaystyle\sum_{i_1 = 1}^{2w + 1}
+\displaystyle\sum_{i_2 = 1}^{2w + 1} & u(i_1+p_1 - w - 1, i_2 + p_2 - w - 1) \\
+& \exp{ \big ( - \frac{(i_1 - w - 1)^2 + (i_2 -w -1)^2 }{2\sigma_s^2} \big )} \\
+& \exp{ \big ( - \frac{[u(i_1 + p_1 - w - 1, i_2 + p_2 - w - 1) - u(p_1, p_2)]^2}{2\sigma_i^2} \big )}
+\end{split}\end{equation*}
 
+\subsubsection*{Q6}
+Ré-écrivons la formule précédente avec les fonctions $S$ et $\tilde{u}$ données:
+\begin{equation*}\begin{split}
+u_\text{denoised}(p_1, p_2) = \frac{1}{C} \displaystyle\sum_{i_1 = 1}^{2w + 1}
+\displaystyle\sum_{i_2 = 1}^{2w + 1} & \tilde{u}(i_1, i_2) S(i_1,i_2) \exp{ \big ( - \frac{[\tilde{u}(i_1, i_2) - u(p_1, p_2)]^2}{2\sigma_i^2} \big )}
+\end{split}\end{equation*}
+
+\subsubsection*{Q7}
+La constante de normalisation s'écrit de même:
+\begin{equation*}\begin{split}
+C = \displaystyle\sum_{i_1 = 1}^{2w + 1}
+\displaystyle\sum_{i_2 = 1}^{2w + 1} S(i_1,i_2) \exp{ \big ( - \frac{[\tilde{u}(i_1, i_2) - u(p_1, p_2)]^2}{2\sigma_i^2} \big )}
+\end{split}\end{equation*}
+\subsubsection*{Q8}
+D'après ce qui a été dit précédemment, trois matrices seront nécessaires pour implémenter le filtre:
+\begin{itemize}
+\item une matrice de la taille de l'image pour conserver les résultats de $u_denoised(p)$ durant le parcours de l'image
+\item une matrice de taille $w \times w$ à valeurs constantes pour stocker les valeurs du kernel spatial
+\item une matrice de taille $w \times w$ à valeurs variables pour stocker les valeurs du kernel d'intensité
+\end{itemize}
+\subsubsection*{Q9. Pseudo-code de l'algorithme}
+\subsection{Analyse}
+\subsubsection*{Q10. $\sigma_i \rightarrow + \infty $}
+\subsubsection*{Q11. $\sigma_i \rightarrow 0 $}
+Le kernel spatial est seul pris en compte.
+\subsubsection*{Q12. $\sigma_s \rightarrow + \infty $}
+\subsubsection*{Q13. $\sigma_s \rightarrow 0 $}
+Le kernel d'intensité est seul pris en compte.
+
+\subsection*{Comparaison de l'histogramme de l'image originale et de l'histogramme de l'image bruitée}
 
 \section{Comparaison zoom zéro padding et TCD}
-
-\begin{enumerate}
-\item Appliquer l'égalisation d'histogramme à quelques images. On pourra
-utiliser une commande Matlab (il faut la chercher!) pour l'égalisation
-(elle fait tout).
-\item Implémenter la méthode midway. On pourra prendre des paires d'images
-que l'on a pris sois même et/ou celle dans l'archive "images.zip".
-
-On pourra se restreindre au cas où les deux images ont même taille pour
-profiter de l'implémentation avec les tris.
-
-\item  Observer une image (e.g. 256x256) qui est la réalisation, en chaque
-pixel, de variables aléatoires gaussiennes (centrées en 1/2) i.i.d pour
-quelques écarts-types (1/100,1/10,1). Dynamique signal: [0,1].
-
-\item Répondre aux questions du document bilateral\_filter\_2016.pdf et en
-déduire l'implémentation du filtre bilatéral. Vous pourrez vous aider du
-squelette dans ?
-
-(On pourra en profiter pour visualiser l'histogramme de l'image
-originale et le comparer à l'histogramme de l'image bruitée).
-
-\item Comparer le zoom par zéro padding et le zoom par transformée en
-cosinus discret implicite.
-\end{enumerate}
+The transformée en cosinus discret implicite se fait en quadruplant une image originale par symmétrie miroir. Ci-dessous l'on compare cette méthode et un zéro padding simple. L'on constate bien que les raies produites par le zéro padding disparaissent par la périodisation implicite de la TCD.
 \end{document}

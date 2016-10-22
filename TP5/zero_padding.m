@@ -24,8 +24,8 @@ function img = implicitTCDZoom(I, zoom)
 
   [nRow, nCol] = size(I);
 
-  symetry = [I(1:end, 1:end, :), I(1:end, end:-1, :); ..
-             I(end:-1:1, 1:end, :), I(end :-1:1, end:-1:1,:)];
+  symetry = [I(1:nRow, 1:nCol, :), I(1:nRow, nCol:-1: O1, :); ..
+             I(nRow:-1:1, 1:nCol, :), I(nRow :-1:1, nCol:-1:1,:)];
 
   figure;imshow(symetry);
 
@@ -35,7 +35,9 @@ function img = implicitTCDZoom(I, zoom)
 
 end
 
-img = imread("images/castles");
+img = imread("flowers.bmp");
+img(1:10, 1, 1)
+size(img)
 zeroPaddingZoom = zero_padding(img, 2);
 
 figure;
@@ -43,5 +45,3 @@ subplot(1, 2, 1);
 imshow(zeroPaddingZoom, zoom);
 subplot(1, 2, 2);
 imshow(implicitTCDZoom, zoom);
-
-//OMG NO OSCILLATION.

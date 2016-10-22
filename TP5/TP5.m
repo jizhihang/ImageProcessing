@@ -2,7 +2,6 @@ clear all
 close all
 clc
 
-
 %% import
 % matfiles = dir(fullfile('C:/users/Karim Kouki/Desktop/Master AIC/Traitement du signal/TP5/images','*.*'));
 
