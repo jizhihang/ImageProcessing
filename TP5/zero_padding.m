@@ -20,28 +20,39 @@ function [zero_padded] = zero_padding(I, zoom_factor)
 
 end
 
-function img = implicitTCDZoom(I, zoom)
+function result = implicitTCDZoom(I, zoom)
 
-  [nRow, nCol] = size(I);
+  [nRow, nCol, nChannel] = size(I);
 
-  symetry = [I(1:nRow, 1:nCol, :), I(1:nRow, nCol:-1: O1, :); ..
-             I(nRow:-1:1, 1:nCol, :), I(nRow :-1:1, nCol:-1:1,:)];
+  symetry = [I(1:nRow, 1:nCol, :), I(1:nRow, nCol:-1:1, :); I(nRow:-1:1, 1:nCol, :), I(nRow :-1:1, nCol:-1:1,:)];
 
-  figure;imshow(symetry);
+  img = zero_padding(symetry, zoom);
 
-  img = zeroPaddingZoom(symetry, zoom);
-
-  img = img(1:nRow, 1:nCol);
+  result = img(1:nRow, 1:nCol, :);
 
 end
 
-img = imread("flowers.bmp");
-img(1:10, 1, 1)
-size(img)
-zeroPaddingZoom = zero_padding(img, 2);
+
+img = double(imread("images/flowers.bmp")/255);
+%img = imread("images/flowers.bmp");
 
 figure;
-subplot(1, 2, 1);
-imshow(zeroPaddingZoom, zoom);
-subplot(1, 2, 2);
-imshow(implicitTCDZoom, zoom);
+imshow(img);
+[nRow, nCol, nChannel]=size(img);
+
+zoom=2;
+zeroPaddingZoom = zero_padding(img, zoom);
+
+figure;
+%subplot(1, 2, 1);
+imshow(zeroPaddingZoom);
+size(zeroPaddingZoom)
+title('Zero padding ')
+%subplot(1, 2, 2);
+figure;
+tcd_im = implicitTCDZoom(img, zoom);
+size(tcd_im)
+imshow(tcd_im);
+title('Implicit TCD')
+
+pause
