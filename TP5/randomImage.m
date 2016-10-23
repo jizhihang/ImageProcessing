@@ -1,9 +1,9 @@
 
 function image = randomImage(average, standard_dev, size)
-  % tirage de size(1) * size(2) * size(3) variables aléatoires suivant Normale(mu, sigma)
+  % Tirage de size(1) * size(2) * size(3) variables aléatoires suivant Normale(mu, sigma)
   image = normrnd(average, standard_dev, size(1), size(2), size(3));
 
-  % Feature scaling [minimum, maximum] -> [0, 1] (par channel)
+  % Per-channel feature scaling [minimum, maximum] -> [0, 1] 
   for i = 1: size(3)
 
     maximum = max(max(image(:, :, i)));

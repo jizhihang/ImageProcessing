@@ -7,14 +7,12 @@ res = zeros(size(image,1),size(image,2));
 [X,Y] = meshgrid(-N:N,-N:N);
 G = exp(-(X.^2+Y.^2)/(2*sigma_s^2));
 
-
 for i = 1:size(image,1)
     %taille de la fenêtre variable en fonction de la proximité avec les bords
          iMin = max(i-N,1);
          iMax = min(i+N,size(image,1)); 
          
    for j = 1:size(image,2)
-      
          
          jMin = max(j-N,1);
          jMax = min(j+N,size(image,2));
@@ -42,5 +40,3 @@ for i = 1:size(image,1)
                 
    end
 end
-
-

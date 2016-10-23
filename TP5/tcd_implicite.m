@@ -24,35 +24,27 @@ function result = implicitTCDZoom(I, zoom)
 
   [nRow, nCol, nChannel] = size(I);
 
-  symetry = [I(1:nRow, 1:nCol, :), I(1:nRow, nCol:-1:1, :); I(nRow:-1:1, 1:nCol, :), I(nRow :-1:1, nCol:-1:1,:)];
+  symmetrie_miroir = [I(1:nRow, 1:nCol, :), I(1:nRow, nCol:-1:1, :); I(nRow:-1:1, 1:nCol, :), I(nRow :-1:1, nCol:-1:1,:)];
 
-  img = zero_padding(symetry, zoom);
+  img = zero_padding(symmetrie_miroir, zoom);
 
   result = img(1:floor(nRow*zoom), 1:floor(nCol*zoom), :);
 
 end
 
-
 img = double(imread("images/flowers.bmp"))/255;
-%img = imread("images/flowers.bmp");
-
-figure;
-imshow(img);
-[nRow, nCol, nChannel]=size(img);
 
 zoom=2;
 zeroPaddingZoom = zero_padding(img, zoom);
 
 %figure;
 %subplot(1, 2, 1);
-
-imwrite(zeroPaddingZoom, "output/flowersZerPad.png");
 %imshow(zeroPaddingZoom);
-size(zeroPaddingZoom)
 %title('Zero padding ')
 %subplot(1, 2, 2);
-%figure;
-tcd_im = implicitTCDZoom(img, zoom);
-size(tcd_im)
-imwrite(tcd_im, "output/flowersTCD.png");
 %title('Implicit TCD')
+tcd_im = implicitTCDZoom(img, zoom);
+%imshow(tcd_im);
+
+imwrite(zeroPaddingZoom, "output/flowersZeroPadding.png");
+imwrite(tcd_im, "output/flowersTCD.png");
