@@ -12,6 +12,8 @@
 \usepackage{graphicx}
 \usepackage{centernot}
 \usepackage{dsfont}
+\usepackage{subcaption}
+\usepackage{caption}
 % modification des dimensions de la page et de son centrage %
 \topmargin 0.0cm
 \oddsidemargin 0.1cm
@@ -35,7 +37,7 @@ L'objectif de l'égalisation d'histogramme est de rehausser le contraste d'une i
 	\newline
 	\includegraphics[width=0.5\textwidth]{hist_p11.png}
 	\includegraphics[width=0.5\textwidth]{hist_p11eq.png}
-  \caption{A gauche l'image originale et histogramme correspondant. A droite l'image dont l'histogramme a été égalisé. }
+  \caption{A gauche l'image originale et l'histogramme correspondant. A droite l'image dont l'histogramme a été égalisé. }
 \end{figure}
 
 \begin{figure}[h]
@@ -43,7 +45,7 @@ L'objectif de l'égalisation d'histogramme est de rehausser le contraste d'une i
 \end{figure}
 
 
-\section{Méthode dite du Midway}
+\section{Méthode du Midway}
 La méthode du Midway consiste à faire la moyenne harmonique de deux images en spécifiant pour chacune l'histogramme moyen des deux. Ici un premier exemple en niveaux de gris, et un autre en couleur.
 
 \begin{figure}[h]
@@ -60,7 +62,6 @@ La méthode du Midway consiste à faire la moyenne harmonique de deux images en 
   \caption{De gauche à droite: patch sur-exposé, sous-exposé et midway}
 \end{figure}
 
-\newpage
 \section{Images de bruit gaussien}
 Chacune des images ci-dessous ont des pixels distribués selon la loi normale: $I \sim \mathcal{N}(\frac{1}{2}, \sigma^2)$
 
@@ -70,7 +71,7 @@ Chacune des images ci-dessous ont des pixels distribués selon la loi normale: $
 	\includegraphics[width=0.33\textwidth]{noise10.png}
   \caption{De gauche à droite $\sigma^2 = \frac{1}{100}, \frac{1}{10}, 1$}
 \end{figure}
-
+\newpage
 \section{Filtre bilatéral}
 L'objectif est d'implémenter une forme simple du filtre bilatéral.
 \subsection{Implémentation}
@@ -92,7 +93,8 @@ Les conditions que les indices $p_1$ et $p_2$ doivent satisfaire sont:
  $$p_i + w < N \;\text{et}\; p_i - w > 0 \;,\; i \in \{1, 2\} \rightarrow p_1, p_2 \in {[w, N-w]}$$
 \subsubsection*{Q5}
 On pose les changements de variable: $i_1 = y_1 - p_1 + w + 1$ et $i_2 = y_2 - p_2 + w + 1$
-Ainsi, par ré-indexation, on réécrit l'équation (3):
+
+Après re-indexation, l'équation (3) s'écrit:
 \begin{equation*}\begin{split}
 u_\text{denoised}(p_1, p_2) = \frac{1}{C} \displaystyle\sum_{i_1 = 1}^{2w + 1}
 \displaystyle\sum_{i_2 = 1}^{2w + 1} & u(i_1+p_1 - w - 1, i_2 + p_2 - w - 1) \\
@@ -121,19 +123,39 @@ D'après ce qui a été dit précédemment, trois matrices seront nécessaires p
 \item une matrice de taille $w \times w$ à valeurs variables pour stocker les valeurs du kernel d'intensité
 \end{itemize}
 \subsection{Analyse}
+
 \subsubsection*{Q10. $\sigma_i \rightarrow + \infty $}
 On tend à uniformiser la valeur de $p$ sur les intensités voisines. L'on observe par exemple un ``aplatissement'' des tâches spectrales, c'est-à-dire une atténuation de celles-ci sur leur bord.
+
 \subsubsection*{Q11. $\sigma_i \rightarrow 0 $}
 Techniquement, le kernel spatial est le seul a être 	pris en compte. En pratique, l'image originale reste inchangée.
+
 \subsubsection*{Q12. $\sigma_s \rightarrow + \infty $}
 On tend à uniformiser sur les valeurs des couleurs voisines (ce qui rappelle une convolution gaussienne).
+
 \subsubsection*{Q13. $\sigma_s \rightarrow 0 $}
 Le kernel d'intensité est seul pris en compte. De même, en pratique, l'image originale reste inchangée.
 
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{flowers_noisy.png}
+        \caption{Image bruitée, $\sigma=0.1$}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{bilateral10_1.png}
+        \caption{$\sigma_s = 10$}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{bilateral1_10.png}
+        \caption{$\sigma_i = 10$}
+    \end{subfigure}
+    \caption{Effet de filtres bilatéraux avec de grands paramètres de kernels.}
+\end{figure}
 \newpage
 \subsection*{Résultats}
-
-\begin{figure}[h]
+Pour une autre image, l'histogramme de l'image résultant du filtrage bilatéral exhibe nettement un lissage de la partie sombre de l'image.
+\begin{figure}[ht]
 	\includegraphics[width=0.5\textwidth]{hist_orig.png}
 	\includegraphics[width=0.5\textwidth]{hist_eq.png}
   \caption{A gauche l'histogramme de l'image originale et à droite l'histogramme après avoir appliqué un filtre bilatéral avec $w=3, \sigma_i = \sigma_s = 1$ }
