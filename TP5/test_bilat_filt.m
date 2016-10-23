@@ -10,6 +10,12 @@ A = double(imread('images/P30.jpg'))/255;
 %imwrite(A, "noisy.png");
 
 % apply the filter
-B = bilateral_filter(A,3,0.1,0.1);
+B = bilateral_filter(A,3,1,1);
 
 imwrite(B, "output/P30b.png");
+pkg load image;
+figure;
+imhist(A);
+figure;
+imhist(B);
+pause;

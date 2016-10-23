@@ -28,12 +28,12 @@ function result = implicitTCDZoom(I, zoom)
 
   img = zero_padding(symetry, zoom);
 
-  result = img(1:nRow, 1:nCol, :);
+  result = img(1:floor(nRow*zoom), 1:floor(nCol*zoom), :);
 
 end
 
 
-img = double(imread("images/flowers.bmp")/255);
+img = double(imread("images/flowers.bmp"))/255;
 %img = imread("images/flowers.bmp");
 
 figure;
@@ -43,16 +43,16 @@ imshow(img);
 zoom=2;
 zeroPaddingZoom = zero_padding(img, zoom);
 
-figure;
+%figure;
 %subplot(1, 2, 1);
-imshow(zeroPaddingZoom);
+
+imwrite(zeroPaddingZoom, "output/flowersZerPad.png");
+%imshow(zeroPaddingZoom);
 size(zeroPaddingZoom)
-title('Zero padding ')
+%title('Zero padding ')
 %subplot(1, 2, 2);
-figure;
+%figure;
 tcd_im = implicitTCDZoom(img, zoom);
 size(tcd_im)
-imshow(tcd_im);
-title('Implicit TCD')
-
-pause
+imwrite(tcd_im, "output/flowersTCD.png");
+%title('Implicit TCD')

@@ -28,10 +28,31 @@
 
 \section{Egalisation d'histogramme}
 La libraire standard Octave implemente la fonction \textsf{histeq}. 
+
+\begin{figure}[h]
+	\includegraphics[width=0.33\textwidth]{noise001.png}
+	\includegraphics[width=0.33\textwidth]{noise01.png}
+  \caption{De gauche à droite $\sigma^2 = \frac{1}{100}, \frac{1}{10}, 1$}
+\end{figure}
+
 \section{Méthode dite du Midway}
 Nous proposons d'utiliser une image en niveaux de gris, et une autre en couleur.
 
-\section{Images de bruit}
+\begin{figure}[h]
+	\includegraphics[width=0.33\textwidth]{NotreDame1.png}
+	\includegraphics[width=0.33\textwidth]{NotreDame2.png}
+	\includegraphics[width=0.33\textwidth]{NotreDame1M.png}
+  \caption{De gauche à droite: Notre-Dame sur-exposée, sous-exposée, et midway}
+\end{figure}
+
+\begin{figure}[h]
+	\includegraphics[width=0.33\textwidth]{P1c.jpg}
+	\includegraphics[width=0.33\textwidth]{P2c.jpg}
+	\includegraphics[width=0.33\textwidth]{P1Mc.png}
+  \caption{De gauche à droite: patch sur-exposé, sous-exposé et midway}
+\end{figure}
+
+\section{Images de bruit gaussien}
 Chacune des images ci-dessous ont des pixels distribués selon la loi normale: $I \sim \mathcal{N}(\frac{1}{2}, \sigma^2)$
 
 \begin{figure}[h]
@@ -40,6 +61,8 @@ Chacune des images ci-dessous ont des pixels distribués selon la loi normale: $
 	\includegraphics[width=0.33\textwidth]{noise10.png}
   \caption{De gauche à droite $\sigma^2 = \frac{1}{100}, \frac{1}{10}, 1$}
 \end{figure}
+
+
 
 \section{Filtre bilatéral}
 L'objectif est d'implémenter une forme simple du filtre bilatéral.
@@ -93,14 +116,16 @@ D'après ce qui a été dit précédemment, trois matrices seront nécessaires p
 \subsubsection*{Q9. Pseudo-code de l'algorithme}
 \subsection{Analyse}
 \subsubsection*{Q10. $\sigma_i \rightarrow + \infty $}
+On tend à uniformiser sur les intensités voisines. L'on observe par exemple un ``aplatissement'' des tâches spectrales, c'est-à-dire une atténuation de celles-ci sur leur bord.
 \subsubsection*{Q11. $\sigma_i \rightarrow 0 $}
-Le kernel spatial est seul pris en compte.
+Techniquement, le kernel spatial est seul pris en compte. En pratique, l'image originale reste inchangée.
 \subsubsection*{Q12. $\sigma_s \rightarrow + \infty $}
+On tend à uniformiser sur les valeurs des couleurs voisines (ce qui rappelle une convolution gaussienne)
 \subsubsection*{Q13. $\sigma_s \rightarrow 0 $}
-Le kernel d'intensité est seul pris en compte.
+Le kernel d'intensité est seul pris en compte. De même, en pratique, l'image originale reste inchangée.
 
 \subsection*{Comparaison de l'histogramme de l'image originale et de l'histogramme de l'image bruitée}
 
 \section{Comparaison zoom zéro padding et TCD}
-The transformée en cosinus discret implicite se fait en quadruplant une image originale par symmétrie miroir. Ci-dessous l'on compare cette méthode et un zéro padding simple. L'on constate bien que les raies produites par le zéro padding disparaissent par la périodisation implicite de la TCD.
+La transformée en cosinus discret implicite se fait en répliquant une image par symmétrie miroir, elle est ainsi quadruplée. Ci-dessous l'on compare cette méthode et un zéro padding simple. L'on constate bien que les raies produites par le zéro padding disparaissent par la périodisation implicite de la TCD.
 \end{document}
