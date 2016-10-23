@@ -27,11 +27,11 @@
 \maketitle
 
 \section{Egalisation d'histogramme}
-La libraire standard Octave implemente la fonction \textsf{histeq}. 
+Les libraires standard Octave et Matlab implémentent la fonction \textsf{histeq}. Ci-dessous un exemple d'histogramme saturé qui a été égalisé.
 
 \begin{figure}[h]
-	\includegraphics[width=0.33\textwidth]{noise001.png}
-	\includegraphics[width=0.33\textwidth]{noise01.png}
+	\includegraphics[width=0.5\textwidth]{hist_orig.png}
+	\includegraphics[width=0.5\textwidth]{hist_eq.png}
   \caption{De gauche à droite $\sigma^2 = \frac{1}{100}, \frac{1}{10}, 1$}
 \end{figure}
 
@@ -120,7 +120,7 @@ On tend à uniformiser sur les intensités voisines. L'on observe par exemple un
 \subsubsection*{Q11. $\sigma_i \rightarrow 0 $}
 Techniquement, le kernel spatial est seul pris en compte. En pratique, l'image originale reste inchangée.
 \subsubsection*{Q12. $\sigma_s \rightarrow + \infty $}
-On tend à uniformiser sur les valeurs des couleurs voisines (ce qui rappelle une convolution gaussienne)
+On tend à uniformiser sur les valeurs des couleurs voisines (ce qui rappelle une convolution gaussienne).
 \subsubsection*{Q13. $\sigma_s \rightarrow 0 $}
 Le kernel d'intensité est seul pris en compte. De même, en pratique, l'image originale reste inchangée.
 
@@ -128,4 +128,11 @@ Le kernel d'intensité est seul pris en compte. De même, en pratique, l'image o
 
 \section{Comparaison zoom zéro padding et TCD}
 La transformée en cosinus discret implicite se fait en répliquant une image par symmétrie miroir, elle est ainsi quadruplée. Ci-dessous l'on compare cette méthode et un zéro padding simple. L'on constate bien que les raies produites par le zéro padding disparaissent par la périodisation implicite de la TCD.
+
+\begin{figure}[h]
+	\includegraphics[width=0.33\textwidth]{P1c.jpg}
+	\includegraphics[width=0.33\textwidth]{P2c.jpg}
+	\includegraphics[width=0.33\textwidth]{P1Mc.png}
+  \caption{De gauche à droite: patch sur-exposé, sous-exposé et midway}
+\end{figure}
 \end{document}
