@@ -52,17 +52,11 @@ gaussianFilter(I, [3.5, 5], 0.01)
 wienerFilter(I, [1..10], [0..0.2]
 
 
-% Changement de l'espace de couleurs
-I_hsv = rbg2hsv(I);
-
 % Boost de la saturation
-I_hsv_boosted = I_hsv;
-I_hsv_boosted(:, :, 2) *= 0.5;
+saturationBoost(I, 1.5);
 
 % Diminution de la saturation
-I_hsv_unsat = I_hsv;
-I_hsv_unsat(:, :, 2) /= 2;
-
+saturationBoost(I, 1.5);
 
 % Contrast change
 % 1. Affine feature scaling

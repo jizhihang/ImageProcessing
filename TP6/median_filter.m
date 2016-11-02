@@ -8,11 +8,13 @@ I=mean(I,3); % Assume grayscle for now
 I_noisy=I(:); % We reorder the matrix to transform it into a vector.
 uniform_numbers = rand(size(I)); % For every  pixel we generate an i.i.d.
 % uniform random variable in  [0,1].
+
 positions_for_zeroes = find(uniform_numbers <= proportion/2); % we look for the positions
 % that satisfy x<proportions. Since uniform_numbers is uniform there are
 % approximatively proportion/2 such values. (This is where we made an
 % approximation. Due to the large size of the image the error will be 
 % small. You can check that.)
+
 I_noisy(positions_for_zeroes) = 0; % These positions are set to zero.
 % Do the same for ones.
 positions_for_ones = find(uniform_numbers > proportion/2 & uniform_numbers <= proportion);
