@@ -1,3 +1,6 @@
+close all;
+clear all;
+
 disp("inversion d'image")
 
 source = double(imread('input/lena.bmp')) / 255;
@@ -41,4 +44,31 @@ moduleSwappedImg = swapModule(source, double(randn(size(source))));
 figure;title('Module swapping in grey image')
 imshow(moduleSwappedImg)
 imwrite(moduleSwappedImg, "output/module_swapping_in_grey_image.jpg")
-pause
+
+
+% Comparison of gaussian & Wiener filters for different levels of noise
+gaussianFilter(I, [1..10], 0)
+gaussianFilter(I, [3.5, 5], 0.01)
+wienerFilter(I, [1..10], [0..0.2]
+
+
+% Changement de l'espace de couleurs
+I_hsv = rbg2hsv(I);
+
+% Boost de la saturation
+I_hsv_boosted = I_hsv;
+I_hsv_boosted(:, :, 2) *= 0.5;
+
+% Diminution de la saturation
+I_hsv_unsat = I_hsv;
+I_hsv_unsat(:, :, 2) /= 2;
+
+
+% Contrast change
+% 1. Affine feature scaling
+% 2. Interpolation lineaire?
+
+% Filtre median
+w = 3;
+pause;
+

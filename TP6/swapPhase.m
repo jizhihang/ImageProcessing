@@ -3,7 +3,6 @@ function image = swapPhase(src, dest)
   if (sum(size(src) != size(dest)) > 0 )
     error('images must have same sizes')
     return
-
   end
 
   src = fft2(src);

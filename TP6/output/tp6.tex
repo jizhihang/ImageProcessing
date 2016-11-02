@@ -10,7 +10,6 @@
 \usepackage{listings} % pour les listings de code %
 \usepackage{helvet} % police helvetica %
 \usepackage{graphicx}
-\usepackage{centernot}
 \usepackage{dsfont}
 \usepackage{subcaption}
 \usepackage{caption}
@@ -36,13 +35,12 @@ Dans cette partie on s'intéresse à l'information portée par la phase et le mo
 \begin{figure}[h]
 	\includegraphics[width=0.3\textwidth]{phase_swapping.jpg}
 	\includegraphics[width=0.3\textwidth]{phase_swapping_in_random.jpg}
-
 	\includegraphics[width=0.3\textwidth]{module_swapping.jpg}
 
-  \caption{A gauche la phase de lena qui a été mélangée au module de barbara. A droite la phase de lena projetée dans une image générée par une gaussienne. }
+  \caption{A gauche la phase de lena qui a été mélangée au module de barbara. A droite la phase de lena projetée dans une image générée par une gaussienne.}
 \end{figure}
 
-On constate qu'une grande partie de l'information est portée par la phase. Inversement on voit que si on transfere le module de l'image de Lena dans Barbara, on voit bien barbara (qui est quand même moins sexy). 
+On constate qu'une grande partie de l'information est portée par la phase. Inversement on voit que si on transfère le module de l'image de Lena dans Barbara, on voit bien barbara (qui est quand même moins sexy). 
 
 Néanmoins la phase seule ne suffit pas (cf figure.2) : si on transporte la phase sur une image uniforme, l'image reste inchangée après transport de phase. 
 
@@ -57,7 +55,15 @@ Néanmoins la phase seule ne suffit pas (cf figure.2) : si on transporte la phas
 On voit que le module ne porte que peu d'information mais a quand même besoin d'être présent. 
 
 
+\section{Ré-haussement des couleurs}
 
-\section{}
+\section{Changement de contraste}
 
+\section{Filtre médian}
+
+\section{Exercice}
+\subsection{TF}
+$$ f_K : \mathbb{R} \ni x \rightarrow \frac{\mathds{1}_{[0, K]}(x)}{K}, K \in \mathbb{R}_*^+ $$
+$$ \hat{f}(\xi) = \int_\mathbb{R} f(x) e^{-ix\xi}$$
+\subsection{Convolution}
 \end{document}
