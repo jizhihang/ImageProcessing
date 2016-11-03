@@ -23,14 +23,19 @@ function I_convolved = wienerFilter(I, sigma_conv, sigma_noise, lambda)
 
   DFT2d_I_convolved=DFT2d_I.*repmat(dft_gauss_kernel,[1,1,nb_color_channels]);
 
-  DFT2d_I_convolved += randn(size(I)) * sigma_noise;
-  % Compute the wiener impulsional response
-  wiener_response = conj(DFT2d_I) ./ (lambda + abs(DFT2d_I) .^ 2);
-  % The deconvolution is computed as the product of the frequential response and the Wiener filter.
-  DFT2d_I_deconvolved = DFT2d_I_convolved .* wiener_response;
-  
   I_convolved=ifft2(DFT2d_I_convolved);
   I_convolved=real(I_convolved);
+
+  DFT2d_I_hat = fft2(DFT2d_I_convolved);
+  
+  DFT2d_I_hat += randn(size(I)) * sigma_noise;
+
+  % Compute the wiener impulsional response
+  wiener_response = conj(DFT2d_I_hat) ./ (lambda + abs(DFT2d_I_hat) .^ 2);
+  % The deconvolution is computed as the product of the frequential response and the Wiener filter.
+  DFT2d_I_deconvolved = DFT2d_I_hat .* wiener_response;
+
+  I_deconvolved = real(ifft2(DFT2d_I_deconvolved));
   % Due to rounding errors I_with_modulus_of_J can have very small
   % but non zero imaginary part. We want a real image for displaying.
 end
