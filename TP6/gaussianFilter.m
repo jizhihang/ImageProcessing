@@ -1,4 +1,4 @@
-function I_convolved = gaussianFilter(I, sigma_conv, sigma_noise)
+function I_deconvolved = gaussianFilter(I, sigma_conv, sigma_noise)
   sigma_2=sigma_conv*sigma_conv;
   pi_2=pi*pi;
   DFT2d_I=fft2(I);
@@ -23,12 +23,16 @@ function I_convolved = gaussianFilter(I, sigma_conv, sigma_noise)
 
   DFT2d_I_convolved=DFT2d_I.*repmat(dft_gauss_kernel,[1,1,nb_color_channels]);
 
-  DFT2d_I_convolved += randn(size(I)) * sigma_noise;
-
-  DFT2d_I_deconvolved = DFT2d_I_convolved ./ repmat(dft_gauss_kernel, [1,1,nb_color_channels]);
-  
   I_convolved=ifft2(DFT2d_I_convolved);
   I_convolved=real(I_convolved);
+
+  DFT2d_I_hat = fft2(DFT2d_I_convolved);
+  
+  DFT2d_I_hat += randn(size(I)) * sigma_noise;
+
+  DFT2d_I_deconvolved = DFT2d_I_hat ./ repmat(fft2(dft_gauss_kernel), [1,1,nb_color_channels]);
+
+  I_deconvolved = real(ifft2(DFT2d_I_deconvolved));
   % Due to rounding errors I_with_modulus_of_J can have very small
   % but non zero imaginary part. We want a real image for displaying.
 end

@@ -46,19 +46,25 @@ imshow(moduleSwappedImg)
 imwrite(moduleSwappedImg, "output/module_swapping_in_grey_image.jpg")
 
 I = double(imread('input/flowers.bmp'))/255;
+output_dir = 'output/';
+
+%figure('Position',[startx,starty,width,height]);plot(0:20,sin(0:20));
+
 % Comparison of gaussian & Wiener filters for different levels of noise
 disp('Deconvolution sans bruit')
 sigma_conv = [1:10];
 for s = [1] %sigma_conv
   I_hat = gaussianFilter(I, s, 0);
-  title_ = ['Deconvolution avec sigma= ' num2str(s)];
-  figure; title(title_); imshow(I_hat);
+  title_ = [output_dir "deconvolution_sigma_" num2str(s) ".png"];
+  % figure; title(title_); imshow(I_hat);
+  imwrite(I_hat, title_);
 end
 
+noise_level = 0.01;
 disp('Deconvolution avec bruit')
-I_hat_noisy = gaussianFilter(I, 3.5, 0.01);
-title_ = ['Deconvolution avec sigma= ' num2str(s)];
-figure; title(title_); imshow(I_hat);
+I_hat_noisy = gaussianFilter(I, 3.5, noise_level);
+title_ = [output_dir "deconvolution_sigma_" num2str(s) "_noise_" num2str(noise_level) ".png"];
+figure; title(title_); imwrite(I_hat_noisy, title_);
 
 disp('Filtre Wiener')
 sigma_noise = [0:0.1:0.3];
@@ -66,8 +72,8 @@ for s_n = [0.1] %sigma_noise
     for s_c = [3.5] %sigma_conv
     	I_wiener = wienerFilter(I, s_c, s_n, 0.5);
 	figure;
-	title_ = ['Deconvolution, sigma_g = ' num2str(s_c) ' noise = ' num2str(s_n)];
-	imshow(I_wiener);
+	title_ = [output_dir "wiener_sigma_g_" num2str(s_c) "_noise_" num2str(s_n) ".png"];
+	imshow(I_wiener); imwrite(I_wiener, title_);
     end
 end
 
@@ -81,8 +87,11 @@ for k = [1:3]
   I_scaled(:, :, k) = (I(:, :, k) - min_)/(max_ - min_);
 end
 
-figure; title('Feature scaled'); imshow(I_scaled);
-
+title_= [output_dir "feature_scaled.png"];
+imwrite(I_scaled, title_);
+pkg load image;
+imhist(I); print([output_dir "hist_orig.png"]);
+imhist(I_scaled);print([output_dir "hist_scaled.png"]);
 % Boost de la saturation
 saturationBoost(I_scaled, 1.5);
 
@@ -93,5 +102,3 @@ saturationBoost(I_scaled, 0.5);
 
 % Filtre median
 w = 3;
-pause
-
