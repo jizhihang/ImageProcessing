@@ -16,14 +16,14 @@ function I_convolved = gaussianFilter(I, sigma_conv, sigma_noise)
 % p. 98-101, 1999. 
 
   dft_gauss_kernel=exp(-sigma_2*pi_2*((Nr/M).^2+(Nc/N).^2)/2);
-  
+
 % In the above Nr/M and Nc/N are the (x,y) frequency they are just placed
 % in order that match the matlab implementation of the DFT values
 % ordering.
 
   DFT2d_I_convolved=DFT2d_I.*repmat(dft_gauss_kernel,[1,1,nb_color_channels]);
 
-  DFT2d_I_convolved += randn(size(I)) * sigma_noise
+  DFT2d_I_convolved += randn(size(I)) * sigma_noise;
 
   DFT2d_I_deconvolved = DFT2d_I_convolved ./ repmat(dft_gauss_kernel, [1,1,nb_color_channels]);
   
