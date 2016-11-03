@@ -61,6 +61,8 @@ for s = [1] %sigma_conv
 end
 
 noise_level = 0.01;
+I_noisy += randn(size(I)) * noise_level;
+
 disp('Deconvolution avec bruit')
 I_hat_noisy = gaussianFilter(I, 3.5, noise_level);
 title_ = [output_dir "deconvolution_sigma_" num2str(s) "_noise_" num2str(noise_level) ".png"];
@@ -82,15 +84,15 @@ end
 % Per-channel feature scaling [minimum, maximum] -> [0, 1]
 I_scaled = zeros(size(I));
 for k = [1:3]
-  max_ = max(max(I(:, :, k)));
-  min_ = min(min(I(:, :, k)));
-  I_scaled(:, :, k) = (I(:, :, k) - min_)/(max_ - min_);
+  max_ = max(max(I_noisy(:, :, k)));
+  min_ = min(min(I_noisy(:, :, k)));
+  I_scaled(:, :, k) = (I_noisy(:, :, k) - min_)/(max_ - min_);
 end
 
 title_= [output_dir "feature_scaled.png"];
 imwrite(I_scaled, title_);
 pkg load image;
-imhist(I); print([output_dir "hist_orig.png"]);
+imhist(I_noisy); print([output_dir "hist_orig.png"]);
 imhist(I_scaled);print([output_dir "hist_scaled.png"]);
 % Boost de la saturation
 saturationBoost(I_scaled, 1.5);
