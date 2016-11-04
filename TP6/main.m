@@ -4,16 +4,17 @@ clear all;
 output_dir = 'output/';
 
 I = double(imread("input/edouard-manet-berthe-morisot.jpg")) / 255;
-
+imwrite(I, "output/edouart-manet-berthe-morisot.jpg");
 % Boost de la saturation
 figure; imshow(I);
 boosted = saturationBoost(I, 1.5);
 figure; imshow(boosted);
-
+imwrite(boosted, "output/edouart-manet-berthe-morisot-boosted.jpg");
 
 % Diminution de la saturation
 unboosted = saturationBoost(I, 0.5);
 figure; imshow(unboosted)
+imwrite(unboosted, "output/edouart-manet-berthe-morisot-deboosted.jpg");
 
 pause
 
