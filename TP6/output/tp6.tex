@@ -32,8 +32,16 @@
 
 On compare la déconvolution par division de la TFD et à l'aide du filtre de Wiener.
 
+Par ailleurs, l'on déconvolue l'image par division de la TFD d'une gaussienne d'écart type $\sigma$.
+\begin{figure}[h]
+	\includegraphics[width=0.3\textwidth]{{deconvolution_sigma_3.5}.png}
+	\includegraphics[width=0.3\textwidth]{deconvolution_sigma_4.png}
+	\includegraphics[width=0.3\textwidth]{{deconvolution_sigma_4.5}.png}
 
-Si la deconvolution brutale marche sur une image sans bruit, elle est complétement inopérante sur les images bruitées. 
+  \caption{La variance de la gaussienne servant à déconvoluer est égale de gauche à droite, \\ $\sigma = 3.5, \;4,\; 4.5$ .}
+\end{figure}
+
+Si la deconvolution brutale marche sur une image sans bruit, elle est complétement inopérante sur les images bruitées cf figure 2B.
 
 
 \begin{figure}[h]
@@ -41,9 +49,18 @@ Si la deconvolution brutale marche sur une image sans bruit, elle est complétem
 	\includegraphics[width=0.3\textwidth]{deconvolution_sigma_1_noise_0_01.png}
 	\includegraphics[width=0.3\textwidth]{deconvolution_wiener_sigma_g_3_5_noise_0_01.png}
 
-  \caption{}
+  \caption{A gauche (A) l'image sans bruit déconvoluée par division. Au milieu la même image bruitée $\sigma = 0.01 $ (B). A droite l'image bruitée déconvoluée par le filtre de Winer (C). }
 \end{figure}
 
+Le filtre de Wiener est robuste à l'ajout de bruit.
+
+\begin{figure}[h]
+	\includegraphics[width=0.3\textwidth]{deconvolution_sigma_1.png}
+	\includegraphics[width=0.3\textwidth]{deconvolution_sigma_1_noise_0_01.png}
+	\includegraphics[width=0.3\textwidth]{deconvolution_wiener_sigma_g_3_5_noise_0_01.png}
+
+  \caption{A gauche l'image déconvoluée par un kernel gaussien, sans bruit. A droite l'ajout de bruit de variance 0.01}
+\end{figure}
 
 \section{Echange de phase}
 
@@ -72,6 +89,7 @@ Néanmoins la phase seule ne suffit pas (cf figure.2) : si on transporte la phas
 
 On voit que le module ne porte que peu d'information mais a quand même besoin d'être présent. 
 
+\newpage
 
 \section{Ré-haussement des couleurs}
 
@@ -84,7 +102,7 @@ On voit que le module ne porte que peu d'information mais a quand même besoin d
   \caption{A gauche image originale. Au milieu, H augmentée de 150 \%. A droite diminuée de 50 \%}
 \end{figure}
 
-
+\newpage
 
 \section{Changement de contraste}
 
@@ -101,6 +119,8 @@ On voit que le module ne porte que peu d'information mais a quand même besoin d
 	\caption{A gauche l'image et l'histogramme originaux. A droite après changement de contraste affine}
 	
 \end{figure}
+
+On constate que l'image de droite a un contraste renforcée. On voit que l'histogramme est davantage étiré. 
 
 \subsection*{Question 2}
 
