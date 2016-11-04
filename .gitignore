@@ -9,3 +9,5 @@ octave-workspace
 *.dvi
 *.gz
 *.pdf
+*.asv
+
