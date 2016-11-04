@@ -3,13 +3,15 @@ clear all;
 
 output_dir = 'output/';
 
-I = double(imread('input/flowers.bmp'))/255;
+I = double(imread('input/boat512.gif')) / 255;
 I_scaled = affineContrast(I);
 title_= [output_dir "feature_scaled.png"];
 imwrite(I_scaled, title_);
 pkg load image;
-figure; imhist(I); print([output_dir "hist_orig.png"]);
-figure; imhist(I_scaled);print([output_dir "hist_scaled.png"]);
+figure; imhist(I);  print([output_dir "hist_orig.png"]);
+figure; imhist(I_scaled); print([output_dir "hist_scaled.png"]);
+figure; imshow(I);
+figure; imshow(I_scaled);
 pause
 
 
