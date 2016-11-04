@@ -1,6 +1,18 @@
 close all;
 clear all;
 
+output_dir = 'output/';
+
+I = double(imread('input/flowers.bmp'))/255;
+I_scaled = affineContrast(I);
+title_= [output_dir "feature_scaled.png"];
+imwrite(I_scaled, title_);
+pkg load image;
+figure; imhist(I); print([output_dir "hist_orig.png"]);
+figure; imhist(I_scaled);print([output_dir "hist_scaled.png"]);
+pause
+
+
 disp("inversion d'image")
 
 source = double(imread('input/lena.bmp')) / 255;
@@ -45,8 +57,10 @@ figure;title('Module swapping in grey image')
 imshow(moduleSwappedImg)
 imwrite(moduleSwappedImg, "output/module_swapping_in_grey_image.jpg")
 
-I = double(imread('input/flowers.bmp'))/255;
-output_dir = 'output/';
+
+% Contrast change
+% 1. Affine feature scaling
+% Per-channel feature scaling [minimum, maximum] -> [0, 1]
 
 %figure('Position',[startx,starty,width,height]);plot(0:20,sin(0:20));
 
@@ -61,7 +75,7 @@ for s = [1] %sigma_conv
 end
 
 noise_level = 0.01;
-I_noisy += randn(size(I)) * noise_level;
+%I_noisy += randn(size(I)) * noise_level;
 
 disp('Deconvolution avec bruit')
 I_hat_noisy = gaussianFilter(I, 3.5, noise_level);
@@ -79,21 +93,6 @@ for s_n = [0.1] %sigma_noise
     end
 end
 
-% Contrast change
-% 1. Affine feature scaling
-% Per-channel feature scaling [minimum, maximum] -> [0, 1]
-I_scaled = zeros(size(I));
-for k = [1:3]
-  max_ = max(max(I_noisy(:, :, k)));
-  min_ = min(min(I_noisy(:, :, k)));
-  I_scaled(:, :, k) = (I_noisy(:, :, k) - min_)/(max_ - min_);
-end
-
-title_= [output_dir "feature_scaled.png"];
-imwrite(I_scaled, title_);
-pkg load image;
-imhist(I_noisy); print([output_dir "hist_orig.png"]);
-imhist(I_scaled);print([output_dir "hist_scaled.png"]);
 % Boost de la saturation
 saturationBoost(I_scaled, 1.5);
 
