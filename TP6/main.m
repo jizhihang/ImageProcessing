@@ -12,8 +12,6 @@ figure; imhist(I);  print([output_dir "hist_orig.png"]);
 figure; imhist(I_scaled); print([output_dir "hist_scaled.png"]);
 figure; imshow(I); imwrite(I, [output_dir, "lena.png"]);
 figure; imshow(I_scaled); imwrite(I_scaled, [output_dir, "lena_hist_scaled.png"]);
-pause
-
 
 disp("inversion d'image")
 
@@ -31,8 +29,8 @@ imshow(phaseSwappedImg)
 imwrite(phaseSwappedImg, "output/phase_swapping.jpg");
 
 phaseInsideRandom = swapPhase(source, double(randn(size(source))));
-figure;title('Phase inside random')
-imshow(phaseInsideRandom)
+figure;title('Phase inside random');
+imshow(phaseInsideRandom);
 
 imwrite(phaseInsideRandom, "output/phase_swapping_in_random.jpg");
 
@@ -74,7 +72,7 @@ for s = [1] %sigma_conv
   title_ = [output_dir "deconvolution_sigma_" num2str(s) ".png"];
   % figure; title(title_); imshow(I_hat);
   imwrite(I_hat, title_);
-end
+end;
 
 noise_level = 0.01;
 %I_noisy += randn(size(I)) * noise_level;
@@ -95,13 +93,24 @@ for s_n = [0.1] %sigma_noise
     end
 end
 
+I=double(imread('input/flowers.bmp'))/255;
 % Boost de la saturation
-saturationBoost(I_scaled, 1.5);
+% saturationBoost(I, 1.5);
 
 % Diminution de la saturation
-saturationBoost(I_scaled, 0.5);
+% saturationBoost(I, 0.5);
 
 % 2. Interpolation lineaire?
-
+I=double(imread('input/lena.bmp'))/255;
 % Filtre median
-w = 3;
+%I=mean(I,3); % Assume grayscle for now
+
+% Window size
+w=3;
+% proportion of corrupted pixels (The following
+% will only produce an approximation of the proportion. See below.)
+proportion=.5;
+
+I_denoised = median_filter(I, proportion, w);
+figure;imshow(I_denoised);title('Denoised by median filter');
+imwrite(I_denoised, [output_dir "median_denoised.png"]);

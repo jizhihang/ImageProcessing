@@ -1,14 +1,4 @@
-clear all;
-close all;
-proportion=.5; % proportion of corrupted pixels (The following
-% will only produce an approximation of the proportion. See below.)
-
-%window size
-w=1;
-
-I=double(imread('input/lena.bmp'))/255;
-I=mean(I,3); % Assume grayscle for now
-
+function I_denoised = median_filter(I, proportion, w)
 % Simulation of the noise
 I_noisy=I(:); % We reorder the matrix to transform it into a vector.
 uniform_numbers = rand(size(I)); % For every  pixel we generate an i.i.d.
@@ -36,28 +26,14 @@ u=I_noisy;
 
 % Denoising. We will use a rectangle of length 2L+1.
 % Be carefull with boundaries, as usual.
-%TODO
 
-for p_1 = w+1:size(u,1)-w
-    for p_2 = w+1:size(u,2)-w
-        
-        %Step 2a. (From eq 10)
-        tilde_u = u(p_1-w:p_1+w,p_2-w:p_2+w);
-        
-        median_p = median(tilde_u(:));
-        
-        I_denoised(p_1-w,p_2-w) = median_p;
+  for p_1 = w+1:size(u,1)-w
+      for p_2 = w+1:size(u,2)-w
+      %Step2a. (From eq 10)
+      tilde_u = u(p_1-w:p_1+w,p_2-w:p_2+w);
+      median_p = median(tilde_u(:));
+      I_denoised(p_1-w,p_2-w) = median_p;
+      end;
+  end;
 
-    end;
 end;
-
-
-
-
-
-
-
-
-
-figure;imshow(I_denoised);title('Denoised by median filter')
-

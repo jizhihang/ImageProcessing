@@ -96,9 +96,46 @@ On peut remplacer $min(I(i,j)$ par $min(I(i,j)) + \epsilon$ et $max$ par $max(I(
 
 \section{Filtre médian}
 
-\section{Exercice}
-\subsection{TF}
+\section{Travail écrit}
+On rapelle que la transformée de Fourier a l'expression suivante:
 $$ f_K : \mathbb{R} \ni x \rightarrow \frac{\mathds{1}_{[0, K]}(x)}{K}, K \in \mathbb{R}_*^+ $$
-$$ \hat{f}(\xi) = \int_\mathbb{R} f(x) e^{-ix\xi}$$
+$$ \hat{f}(\xi) = \int_\mathbb{R} f(x) e^{-ix\xi} \:\mathrm{d}x$$
+
 \subsection{Convolution}
+
+\begin{equation*}\begin{split}
+\hat{f_K}(\xi) 
+&= \int_\mathbb{R} \frac{\mathds{1}_{[0, K]}(x)}{K} e^{-ix\xi} \:\mathrm{d}x \;=\; \int_0^{K} \frac{1}{K}e^{-ix\xi}\:\mathrm{d} x \\
+&= -\frac{1}{i \xi K} e^{\frac{-i \xi K}{2}}\bigg [ e^{\frac{-i \xi K}{2}} - e^{\frac{i \xi K}{2}} \bigg] \\
+&= \frac{2}{\xi K} e^{\frac{-i \xi K}{2}} \sin(\frac{\xi K}{2\pi})\\
+&= e^{\frac{-i \xi K}{2}} \text{sinc}(\frac{\xi K}{2\pi})
+\end{split}\end{equation*}
+
+\subsection{Flou de bougé}
+\begin{enumerate}
+\item Si K est strictement positif, le dénominateur de la transformée de Fourier calculée précédemment ne s'annule pas. La convolution par $f_K$ est donc inversible.
+
+On calcule ainsi la convolution de $f = u$ et $g =f_{v \Delta t} \times \Delta t $. Ainsi,
+\begin{equation*}\begin{split}
+(f * g)(x) = \int_\mathbb{R} u(x-z)\frac{\mathds{1}_{[0, v \Delta t]}(x)}{v \Delta t} \Delta t \:\mathrm{d}z \; = \;   \int_{0}^{v \Delta t} \frac{u(x-z)}{v} \:\mathrm{d}z
+\end{split}\end{equation*}
+
+En posant le changement de variable affine: $ z=v t $, on obtient les bonnes bornes d'intégration et la formule souhaitée:
+$$(f * g)(x) = \int_{0}^{\Delta t} u(x-vt)\:\mathrm{d}t$$
+\item Le flou perçu dépend de $v$:
+
+\begin{itemize}
+\item Si pendant le temps $\Delta t$, la distance $v \Delta t$ parcourue par l'objet observé est inférieure à la résolution du capteur, l'image observée ne sera pas forcément perçue plus floue.
+\item Inversement, si pendant le temps $\Delta t$, la distance $v \Delta t$ est suffisamment importante, plus les zones réceptrices du capteur vont recevoir des photons d'un objet qui a bougé d'autant plus avec l'augmentation de $\Delta t$. Dans ce cas de figure, l'objet est perçu plus flou.
+\end{itemize}
+
+\item Pour simuler un flou de bougé, on peut utiliser l'algorithme:
+\begin{itemize}
+\item On choisit $v \; et \; \Delta t$ 
+\item On calcule la TFD de l'image et celle de la fonction porte
+\item On réalise le produit de convolution par multiplication des TFD de l'image et de la fonction porte
+\item Finalement on prend la TFD inverse afin de pouvoir visualiser l'image.
+\end{itemize}
+
+\end{enumerate}
 \end{document}
