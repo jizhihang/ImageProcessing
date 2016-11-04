@@ -1,12 +1,16 @@
 % Changes image saturation by given factor
-function saturationBoost(I, boost_factor)
-% Changement de lespace de couleurs
-  I_hsv = rgb2hsv(I);
-% Boost de la saturation
-  I_hsv(:, :, 2) = I_hsv(:, :, 2) * boost_factor;
-  I_hsv(:, :, 2) = min(I_hsv(:, :, 2), 1);
+function boosted =  saturationBoost(I, boost_factor)
 
-  I_boosted = hsv2rgb(I_hsv);
-  figure; title_ = ["output/saturation_boosted_" num2str(boost_factor) ".png"];
-  imwrite(I_boosted, title_);
+  boosted = rgb2hsv(I);
+
+  boosted(:, :, 2) = boosted(:, :, 2) * boost_factor;
+
+  %remove values above after h boosting
+  %can do this because all h,s and v values are below 1;
+  overOne = find(boosted > 1);
+
+  boosted(overOne) = 1;
+
+  boosted = hsv2rgb(boosted);
+
 end
