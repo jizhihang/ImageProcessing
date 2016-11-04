@@ -28,11 +28,11 @@
 \maketitle
 
 
-\section{Déconvolution par division et par filtre de Weiner}
+\section{Déconvolution par division et par filtre de Wiener}
 
-On compare la déconvolution par division de la TFD et à l'aide du filtre de Wiener.
+On compare la déconvolution par division de la TFD et par filtrage de Wiener. On a d'abord déconvolé l'image par division de sa TFD avec différentes gaussiennes de variance $\sigma$. On a ensuite effectué le même traitement sur des images bruitées. Enfin on a déconvolé l'image bruitée à l'aide du filtre de Wiener.
 
-Par ailleurs, l'on déconvolue l'image par division de la TFD d'une gaussienne d'écart type $\sigma$.
+
 \begin{figure}[h]
 	\includegraphics[width=0.3\textwidth]{{deconvolution_sigma_3.5}.png}
 	\includegraphics[width=0.3\textwidth]{deconvolution_sigma_4.png}
@@ -41,51 +41,39 @@ Par ailleurs, l'on déconvolue l'image par division de la TFD d'une gaussienne d
   \caption{La variance de la gaussienne servant à déconvoluer est égale de gauche à droite, \\ $\sigma = 3.5, \;4,\; 4.5$ .}
 \end{figure}
 
-Si la deconvolution brutale marche sur une image sans bruit, elle est complétement inopérante sur les images bruitées cf figure 2B.
+Pour des faibles valeurs de $\sigma$ la déconvolution par division de la TFD semble marcher. Néanmoins pour des plus grandes valeurs de $\sigma$ des artefacts apparaissent sur l'image (cf figure 1).
+
+De plus la déconvolution par division est inopérente sur des images bruitées (cf figure 2).
 
 
 \begin{figure}[h]
-	\includegraphics[width=0.3\textwidth]{deconvolution_sigma_1.png}
+	\includegraphics[width=0.3\textwidth]{{deconvolution_sigma_3.5}.png}
 	\includegraphics[width=0.3\textwidth]{deconvolution_sigma_1_noise_0_01.png}
-	\includegraphics[width=0.3\textwidth]{deconvolution_wiener_sigma_g_3_5_noise_0_01.png}
+	\includegraphics[width=0.3\textwidth]{{deconvolution_wiener_sigma_g_3.5_noise_10_lambda_1}.png}
 
-  \caption{A gauche (A) l'image sans bruit déconvoluée par division. Au milieu la même image bruitée $\sigma = 0.01 $ (B). A droite l'image bruitée déconvoluée par le filtre de Winer (C). }
+  \caption{A gauche (A) l'image sans bruit déconvoluée par division. Au milieu la même image bruitée $\sigma = 0.01 $ (B). A droite l'image bruitée déconvoluée par le filtre de Wiener (C). }
 \end{figure}
 
-Le filtre de Wiener est robuste à l'ajout de bruit.
-
-\begin{figure}[h]
-	\includegraphics[width=0.3\textwidth]{deconvolution_sigma_1.png}
-	\includegraphics[width=0.3\textwidth]{deconvolution_sigma_1_noise_0_01.png}
-	\includegraphics[width=0.3\textwidth]{deconvolution_wiener_sigma_g_3_5_noise_0_01.png}
-
-  \caption{A gauche l'image déconvoluée par un kernel gaussien, sans bruit. A droite l'ajout de bruit de variance 0.01}
-\end{figure}
+Le filtre de Wiener quant à lui est robuste à l'ajout de bruit.
 
 \section{Echange de phase}
 
-Dans cette partie on s'intéresse à l'information portée par la phase et le module de la TFD d'une image. 
+Dans cette partie on s'intéresse à l'information portée par la phase et le module de la TFD d'une image. On a mélangé deux images en prenant le module de la TFD de l'une et la phase de la TFD de la seconde.
 
+Dans un premier temps on a utilisé la phase de l'image de Lenna qu'on a mélangé avec le module de l'image de Barbara. Dans un second temps on à nouveau utilisé la phase de Lenna avec une image aléatoire générée par une Gaussienne. Enfin on a utilisé la phase de Lenna avec le module d'une image grise homogène: $I(i,j) = 0.5$.
 
 \begin{figure}[h]
 	\includegraphics[width=0.3\textwidth]{phase_swapping.jpg}
 	\includegraphics[width=0.3\textwidth]{phase_swapping_in_random.jpg}
-	\includegraphics[width=0.3\textwidth]{module_swapping.jpg}
+		\includegraphics[width=0.3\textwidth]{phase_swapping_in_grey_image.jpg}
 
-  \caption{A gauche la phase de lena qui a été mélangée au module de barbara. Au milieu, la phase de lena projetée sur une image générée par une gaussienne. A droite le module de Lena et Barbara ont été échangés.}
+  \caption{A gauche la phase de lena qui a été mélangée au module de barbara. Au milieu, la phase de lena projetée sur une image générée par une gaussienne. A droite la phase de Lena est exportée dans une image grise homogène.}
+  
 \end{figure}
 
-On constate qu'une grande partie de l'information est portée par la phase. Inversement on voit que si on transfère le module de l'image de Lena dans Barbara, on voit bien barbara (qui est quand même moins sexy). 
+On constate qu'une grande partie de l'information est portée par la phase. Inversement on voit que si on transfère le module de l'image de Lena dans Barbara, on voit bien Barbara.
 
 Néanmoins la phase seule ne suffit pas (cf figure.2) : si on transporte la phase sur une image uniforme, l'image reste inchangée après transport de phase. 
-
-\begin{figure}[h]
-
-	\includegraphics[width=0.3\textwidth]{phase_swapping_in_grey_image.jpg}
-
-  \caption{Phase de lena exportée dans une image constante (gris total)}
-\end{figure}
-
 
 On voit que le module ne porte que peu d'information mais a quand même besoin d'être présent. 
 
@@ -99,8 +87,10 @@ On voit que le module ne porte que peu d'information mais a quand même besoin d
 	\includegraphics[width=0.3\textwidth]{edouart-manet-berthe-morisot.jpg}
 	\includegraphics[width=0.3\textwidth]{edouart-manet-berthe-morisot-boosted.jpg}
 	\includegraphics[width=0.3\textwidth]{edouart-manet-berthe-morisot-deboosted.jpg}
-  \caption{A gauche image originale. Au milieu, H augmentée de 150 \%. A droite diminuée de 50 \%}
+  \caption{A gauche image originale (Berthe Morisot de Manet). Au milieu, H augmenté de 150 \%. A droite diminué de 50 \%}
 \end{figure}
+
+On voit que le réhaussement de couleur accentue la coloration de l'image. Les parties noires de l'image ne sont pas impactée par le procédé. On peut supposer que les pixels blancs ne seraient pas impactés non plus. Inversement l'atténuation de H, l'image "décolore" l'image en lui donnant l'apparence d'une image en niveau de gris.
 
 \newpage
 
@@ -108,29 +98,30 @@ On voit que le module ne porte que peu d'information mais a quand même besoin d
 
 \subsection*{Question 1}
 
+Dans cette partie on s'intéresse à un réhaussement de contraste par transformation affine :
+
+$$I'(i,j) = \frac{1}{min-max} * (I(i,j) - min)$$
+
 \begin{figure}[h]
 
 	\includegraphics[width=0.5\textwidth]{hist_orig.png}
 	\includegraphics[width=0.5\textwidth]{hist_scaled.png}
-		
-	\includegraphics[width=0.5\textwidth]{lena.png}
-	\includegraphics[width=0.5\textwidth]{lena_hist_scaled.png}
+
+\centering
+	\includegraphics[scale=0.4]{lena.png}
+	\includegraphics[scale=0.4]{lena_hist_scaled.png}
 		
 	\caption{A gauche l'image et l'histogramme originaux. A droite après changement de contraste affine}
 	
 \end{figure}
 
-On constate que l'image de droite a un contraste renforcée. On voit que l'histogramme est davantage étiré. 
+On constate que l'image de droite a un contraste renforcé. On voit que l'histogramme est étiré : les écarts entre les niveaux de gris sont uniformisés.  
 
 \subsection*{Question 2}
 
-Dans le cas où il existe dans l'image un pixel qui est nul et un pixel d'intensité maximal (1). Alors la transformation affine n'a aucun effet : 
-
-
-$$min(I(i,j) = 0$$
-$$max(I(i,j)) = 1$$
+Dans le cas où il existe dans l'image un pixel qui est nul et un pixel d'intensité maximal (1). Alors la transformation affine n'a aucun effet : $\min I(i,j) = 0 \;\;\; \max I(i,j) = 1$
 	
-$$I'(i,j) = \frac{1}{min-max} * (I(i,j) - min) = I(i,j)$$
+$$I'(i,j) = \frac{1}{\min-\max} * (I(i,j) -\min) = I(i,j)$$
 
 
 \begin{figure}[h]
@@ -140,17 +131,28 @@ $$I'(i,j) = \frac{1}{min-max} * (I(i,j) - min) = I(i,j)$$
 \end{figure}
 
 
-On peut remplacer $min(I(i,j)$ par $min(I(i,j)) + \epsilon$ et $max$ par $max(I(i,j)$ par $max(I(i,j) - \epsilon$ (à Tester)
+Une solution est de remplacer $\min I(i,j)$ par $\min I(i,j) + \epsilon$ et $\max$ par $\max I(i,j)$ par $\max I(i,j) - \epsilon$.
+Il est aussi possible de remplacer uniquement les pixels de valeurs 0 et 1 par $\epsilon$ et $1-\epsilon$ respectivement.
 
 
 \section{Filtre médian}
+	Dans le cas où du bruit de type salt'n'pepper entâche le signal de l'image que l'on souhaite traiter, le filtre médian se révèle particulièrement efficace. Le filtre est un processus itératif qui lisse l'image en définissant une fenêtre carrée autour de chaque pixel,  calcule la valeur médiane de l'intensité des pixels de la fenêtre et assigne celle-ci au pixel courant.
+	
+\begin{figure}[h]
 
+	\includegraphics[width=0.5\textwidth]{median_noisy.png}
+	\includegraphics[width=0.5\textwidth]{median_denoised.png}
+	\caption{A gauche l'image bruitée donnée en entrée au filtre médian et à droite le résultat du débruitage.}
+	
+\end{figure}
+\newpage
 \section{Travail écrit}
-On rapelle que la transformée de Fourier a l'expression suivante:
-$$ f_K : \mathbb{R} \ni x \rightarrow \frac{\mathds{1}_{[0, K]}(x)}{K}, K \in \mathbb{R}_*^+ $$
-$$ \hat{f}(\xi) = \int_\mathbb{R} f(x) e^{-ix\xi} \:\mathrm{d}x$$
 
 \subsection{Convolution}
+On rapelle l'expression de la transformée de Fourier:
+$ \hat{f}(\xi) = \int_\mathbb{R} f(x) e^{-ix\xi} \:\mathrm{d}x$
+
+On s'intéresse à la fonction: $ f_K : \mathbb{R} \ni x \rightarrow \frac{\mathds{1}_{[0, K]}(x)}{K}, K \in \mathbb{R}_+^* $
 
 \begin{equation*}\begin{split}
 \hat{f_K}(\xi) 

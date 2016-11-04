@@ -1,4 +1,4 @@
-function I_denoised = median_filter(I, proportion, w)
+function [I_noisy, I_denoised] = median_filter(I, proportion, w)
 % Simulation of the noise
 I_noisy=I(:); % We reorder the matrix to transform it into a vector.
 uniform_numbers = rand(size(I)); % For every  pixel we generate an i.i.d.

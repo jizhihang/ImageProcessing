@@ -78,9 +78,25 @@ imwrite(moduleSwappedImg, "output/module_swapping_in_grey_image.jpg")
 
 disp('Deconvolution par division avec bruit')
 noise_level = 0.01;
-I_hat_noisy = gaussianFilter(I, 3.5, noise_level);
+s = 3.5;
+I_hat_noisy = gaussianFilter(I, s, noise_level);
 title_ = [output_dir "deconvolution_sigma_" num2str(s) "_noise_" num2str(noise_level) ".png"];
 figure; title(title_); imwrite(I_hat_noisy, title_);
 
 % Comparison of gaussian & Wiener filters for different levels of noise
 noisy_deconvolution_test
+
+% Filtre median
+I = double(imread('input/lena.bmp'))/255;
+
+% Window size
+w=3;
+% proportion of corrupted pixels (The following
+% will only produce an approximation of the proportion. See below.)
+proportion=.5;
+
+[I_noisy, I_denoised] = median_filter(I, proportion, w);
+figure;imshow(I_denoised);title('Denoised by median filter');
+imwrite(I_noisy, [output_dir "median_noisy.png"]);
+imwrite(I_denoised, [output_dir "median_denoised.png"]);
+
