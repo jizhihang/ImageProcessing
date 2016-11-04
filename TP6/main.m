@@ -3,15 +3,15 @@ clear all;
 
 output_dir = 'output/';
 
-I = double(imread('input/boat512.gif')) / 255;
+I = double(imread('input/lena.bmp')) / 255;
 I_scaled = affineContrast(I);
 title_= [output_dir "feature_scaled.png"];
 imwrite(I_scaled, title_);
 pkg load image;
 figure; imhist(I);  print([output_dir "hist_orig.png"]);
 figure; imhist(I_scaled); print([output_dir "hist_scaled.png"]);
-figure; imshow(I);
-figure; imshow(I_scaled);
+figure; imshow(I); imwrite(I, [output_dir, "lena.png"]);
+figure; imshow(I_scaled); imwrite(I_scaled, [output_dir, "lena_hist_scaled.png"]);
 pause
 
 

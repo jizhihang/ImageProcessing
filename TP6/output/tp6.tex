@@ -59,6 +59,41 @@ On voit que le module ne porte que peu d'information mais a quand même besoin d
 
 \section{Changement de contraste}
 
+\subsection*{Question 1}
+
+\begin{figure}[h]
+
+	\includegraphics[width=0.5\textwidth]{hist_orig.png}
+	\includegraphics[width=0.5\textwidth]{hist_scaled.png}
+		
+	\includegraphics[width=0.5\textwidth]{lena.png}
+	\includegraphics[width=0.5\textwidth]{lena_hist_scaled.png}
+		
+	\caption{A gauche l'image et l'histogramme originaux. A droite après changement de contraste affine}
+	
+\end{figure}
+
+\subsection*{Question 2}
+
+Dans le cas où il existe dans l'image un pixel qui est nul et un pixel d'intensité maximal (1). Alors la transformation affine n'a aucun effet : 
+
+
+$$min(I(i,j) = 0$$
+$$max(I(i,j)) = 1$$
+	
+$$I'(i,j) = \frac{1}{min-max} * (I(i,j) - min) = I(i,j)$$
+
+
+\begin{figure}[h]
+		
+	\caption{A gauche l'image et l'histogramme originaux. A droite après changement de contraste affine}
+	
+\end{figure}
+
+
+On peut remplacer $min(I(i,j)$ par $min(I(i,j)) + \epsilon$ et $max$ par $max(I(i,j)$ par $max(I(i,j) - \epsilon$ (à Tester)
+
+
 \section{Filtre médian}
 
 \section{Exercice}
