@@ -3,6 +3,21 @@ clear all;
 
 output_dir = 'output/';
 
+I = double(imread("input/edouard-manet-berthe-morisot.jpg")) / 255;
+
+% Boost de la saturation
+figure; imshow(I);
+boosted = saturationBoost(I, 1.5);
+figure; imshow(boosted);
+
+
+% Diminution de la saturation
+unboosted = saturationBoost(I, 0.5);
+figure; imshow(unboosted)
+
+pause
+
+
 I = double(imread('input/lena.bmp')) / 255;
 I_scaled = affineContrast(I);
 title_= [output_dir "feature_scaled.png"];
@@ -95,11 +110,7 @@ for s_n = [0.1] %sigma_noise
     end
 end
 
-% Boost de la saturation
-saturationBoost(I_scaled, 1.5);
 
-% Diminution de la saturation
-saturationBoost(I_scaled, 0.5);
 
 % 2. Interpolation lineaire?
 
