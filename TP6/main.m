@@ -16,9 +16,6 @@ unboosted = saturationBoost(I, 0.5);
 figure; imshow(unboosted)
 imwrite(unboosted, "output/edouart-manet-berthe-morisot-deboosted.jpg");
 
-pause
-
-
 I = double(imread('input/lena.bmp')) / 255;
 I_scaled = affineContrast(I);
 title_= [output_dir "feature_scaled.png"];
@@ -28,8 +25,6 @@ figure; imhist(I);  print([output_dir "hist_orig.png"]);
 figure; imhist(I_scaled); print([output_dir "hist_scaled.png"]);
 figure; imshow(I); imwrite(I, [output_dir, "lena.png"]);
 figure; imshow(I_scaled); imwrite(I_scaled, [output_dir, "lena_hist_scaled.png"]);
-pause
-
 
 disp("inversion d'image")
 
@@ -83,7 +78,8 @@ imwrite(moduleSwappedImg, "output/module_swapping_in_grey_image.jpg")
 %figure('Position',[startx,starty,width,height]);plot(0:20,sin(0:20));
 
 % Comparison of gaussian & Wiener filters for different levels of noise
-disp('Deconvolution sans bruit')
+imwrite(I, "deconvolution_originale.png");
+disp('Deconvolution par division sans bruit')
 sigma_conv = [1:10];
 for s = [1] %sigma_conv
   I_hat = gaussianFilter(I, s, 0);
@@ -93,27 +89,20 @@ for s = [1] %sigma_conv
 end
 
 noise_level = 0.01;
-%I_noisy += randn(size(I)) * noise_level;
 
-disp('Deconvolution avec bruit')
+disp('Deconvolution par division avec bruit')
 I_hat_noisy = gaussianFilter(I, 3.5, noise_level);
 title_ = [output_dir "deconvolution_sigma_" num2str(s) "_noise_" num2str(noise_level) ".png"];
 figure; title(title_); imwrite(I_hat_noisy, title_);
 
-disp('Filtre Wiener')
-sigma_noise = [0:0.1:0.3];
-for s_n = [0.1] %sigma_noise
+disp('Deconvolution par filtre Wiener avec bruit')
+
+lambda = 0.5;
+for s_n = [noise_level] %sigma_noise
     for s_c = [3.5] %sigma_conv
-    	I_wiener = wienerFilter(I, s_c, s_n, 0.5);
-	figure;
-	title_ = [output_dir "wiener_sigma_g_" num2str(s_c) "_noise_" num2str(s_n) ".png"];
-	imshow(I_wiener); imwrite(I_wiener, title_);
+    	  I_wiener = wienerFilter(I, s_c, s_n, lambda);
+	      figure;
+	      title_ = [output_dir "deconvolution_wiener_sigma_g_" num2str(s_c) "_noise_" num2str(s_n) ".png"];
+	      imshow(I_wiener); imwrite(I_wiener, title_);
     end
 end
-
-
-
-% 2. Interpolation lineaire?
-
-% Filtre median
-w = 3;
